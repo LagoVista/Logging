@@ -9,7 +9,7 @@ namespace LagoVista.IoT.Logging
     {
         public void Log(LogLevel level, string area, string message, params KeyValuePair<string, string>[] args)
         {
-
+            
         }
 
         public void LogException(string area, Exception ex, params KeyValuePair<string, string>[] args)
