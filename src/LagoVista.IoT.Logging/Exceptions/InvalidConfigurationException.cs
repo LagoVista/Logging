@@ -17,6 +17,11 @@ namespace LagoVista.IoT.Logging.Exceptions
             Error.Details = details;
         }
 
+        public InvalidConfigurationException(ErrorCode errCode) : this(errCode, null)
+        {
+
+        }
+
         public InvalidConfigurationException(ErrorCode errorCode, string details)
         {
             Error = errorCode.ToError();
@@ -32,5 +37,15 @@ namespace LagoVista.IoT.Logging.Exceptions
         }
 
         public Error Error { get; private set; }
+
+        public static InvalidConfigurationException FromErrorCode(ErrorCode errorCode)
+        {
+            return new InvalidConfigurationException(errorCode);
+        }
+
+        public static InvalidConfigurationException FromErrorCode(ErrorCode errorCode, string details)
+        {
+            return new InvalidConfigurationException(errorCode, details);
+        }
     }
 }

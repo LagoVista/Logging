@@ -17,6 +17,11 @@ namespace LagoVista.IoT.Logging.Exceptions
             Error.Details = details;
         }
 
+        public InvalidOperationException(ErrorCode errorCode)
+        {
+            Error = errorCode.ToError();
+        }
+
         public InvalidOperationException(ErrorCode errorCode, string details)
         {
             Error = errorCode.ToError();
@@ -32,5 +37,15 @@ namespace LagoVista.IoT.Logging.Exceptions
         }
 
         public Error Error { get; private set; }
+
+        public static InvalidOperationException FromErrorCode(ErrorCode errorCode)
+        {
+            return new InvalidOperationException(errorCode);
+        }
+
+        public static InvalidOperationException FromErrorCode(ErrorCode errorCode, string details)
+        {
+            return new InvalidOperationException(errorCode, details);
+        }
     }
 }
