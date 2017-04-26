@@ -19,5 +19,7 @@ namespace LagoVista.IoT.Logging
         public string Message { get; set; }
         public string Details { get; set; }
         public List<KeyValuePair<string, string>> Extras { get; set; }
+
+
     }
 }
