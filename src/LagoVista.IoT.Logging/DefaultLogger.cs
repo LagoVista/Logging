@@ -7,6 +7,8 @@ namespace LagoVista.IoT.Logging
 {
     public class DefaultLogger : ILogger
     {
+        /* Want to capture the concept of subscribing to messages from specific devices */
+
         public void Log(LogLevel level, string area, string message, params KeyValuePair<string, string>[] args)
         {
             
