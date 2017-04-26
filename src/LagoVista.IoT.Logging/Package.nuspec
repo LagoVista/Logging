@@ -11,7 +11,7 @@
     <description>Provides Logging and Error Reporing Implementations for the LagoVista Devices, IoT and HOme Automation Frameworks.</description>
     <releaseNotes>Initial and Unstable Release</releaseNotes>
     <copyright>Copyright 2017</copyright>
-    <tags>HomeAutomation IoT</tags>
+    <tags>HomeAutomation IoT Cloud LagoVista</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="10.0.1" />
     </dependencies>
