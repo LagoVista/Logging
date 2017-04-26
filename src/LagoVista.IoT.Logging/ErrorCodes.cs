@@ -27,5 +27,4 @@ namespace LagoVista.IoT.Logging
 
         public static Dictionary<string, ErrorCode> Codes { get { return _errorCodes; } }
     }
-
 }
