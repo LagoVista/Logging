@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.Validation;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -46,6 +47,14 @@ namespace LagoVista.IoT.Logging.Exceptions
         public static InvalidConfigurationException FromErrorCode(ErrorCode errorCode, string details)
         {
             return new InvalidConfigurationException(errorCode, details);
+        }
+
+        public InvokeResult ToFailedInvocation()
+        {
+            var result = new InvokeResult();
+            var errMessage = new ErrorMessage(Error.ErrorCode, Error.Message);
+            result.Errors.Add(errMessage);
+            return result;
         }
     }
 }
