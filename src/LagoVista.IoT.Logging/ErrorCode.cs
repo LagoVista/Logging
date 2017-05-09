@@ -19,6 +19,14 @@ namespace LagoVista.IoT.Logging
             };
         }
 
+        public ErrorMessage ToErrorMessage(String details = "")
+        {
+            var result = new InvokeResult();
+            var errorMessage = new ErrorMessage(Code, Message);
+            errorMessage.Details = details;
+            return errorMessage;
+        }
+
         public InvokeResult ToFailedInvocation(String details = "")
         {
             var result = new InvokeResult();
