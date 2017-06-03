@@ -6,22 +6,28 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public interface IDeviceLogger
     {
+        String HostId { get; }
+        string InstanceId { get; }
+
+
         String InstrumentationKey { get; }
 
-        void AddEvent(LagoVista.Core.PlatformSupport.LogLevel level, string tag, string instanceId, string hostId, string deviceTypeId, string deviceId, string customEvent, params KeyValuePair<string, string>[] args);
+        void AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel level, string tag, string deviceTypeId, string deviceId, string customEvent, params KeyValuePair<string, string>[] args);
         /* Log performance */
-        void AddMetric(string instanceId, string hostId, string deviceTypeId, string deviceId, string measure, double duration);
+        void AddMetric(string deviceTypeId, string deviceId, string measure, double duration);
 
-        void AddMetric(string instanceId, string hostId, string deviceTypeId, string deviceId, string measure, int count);
+        void AddMetric(string deviceTypeId, string deviceId, string measure, TimeSpan duration);
+
+        void AddMetric(string deviceTypeId, string deviceId, string measure, int count = 1);
         /* Log errors */
 
-        void AddError(string instanceId, string hostId, string deviceTypeId, string deviceId, string tag, string message, params KeyValuePair<string, string>[] args);
+        void AddError(string deviceTypeId, string deviceId, string tag, string message, params KeyValuePair<string, string>[] args);
 
-        void AddError(string instanceId, string hostId, string deviceTypeId, string deviceId, ErrorCode errorCode, params KeyValuePair<string, string>[] args);
+        void AddError(string deviceTypeId, string deviceId, ErrorCode errorCode, params KeyValuePair<string, string>[] args);
 
-        void AddConfigurationError(string instanceId, string hostId, string deviceTypeId, string deviceId, string tag, string message, params KeyValuePair<string, string>[] args);
+        void AddConfigurationError(string deviceTypeId, string deviceId, string configurationSetting, string error, params KeyValuePair<string, string>[] args);
 
-        void AddException(string instanceId, string hostId, string deviceTypeId, string deviceId, string tag, Exception ex, params KeyValuePair<string, string>[] args);
+        void AddException(string deviceTypeId, string deviceId, string tag, Exception ex, params KeyValuePair<string, string>[] args);
 
     }
 }

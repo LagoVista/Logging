@@ -20,7 +20,7 @@ namespace LagoVista.IoT.Logging.Loggers
 
         void AddError(ErrorCode errorCode, params KeyValuePair<string, string>[] args);
 
-        void AddConfigurationError(string tag, string message, params KeyValuePair<string, string>[] args);
+        void AddConfigurationError(string configurationSetting, string error, params KeyValuePair<string, string>[] args);
 
         void AddException(string tag, Exception ex, params KeyValuePair<string, string>[] args);
 
@@ -28,7 +28,7 @@ namespace LagoVista.IoT.Logging.Loggers
 
         void AddMetric(string measure, TimeSpan duration);
 
-        void AddMetric(string measure, int count);
+        void AddMetric(string measure, int count = 1);
         
         /* Log start/stop */
         void Start();
