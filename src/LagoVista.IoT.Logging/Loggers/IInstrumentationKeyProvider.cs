@@ -6,9 +6,9 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public interface IInstrumentationKeyProvider
     {
-        string AdminInstrumentationKey { get; set; }
-        string HostInstrumentationKey { get; set; }
-        string InstanceInstrumentationKey { get; set; }
-        string DeviceInstrumentationKey { get; set; }
+        string AdminInstrumentationKey { get; }
+        string HostInstrumentationKey { get; }
+        string InstanceInstrumentationKey { get; }
+        string DeviceInstrumentationKey { get; }
     }
 }
