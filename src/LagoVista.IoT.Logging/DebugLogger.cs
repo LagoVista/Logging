@@ -16,13 +16,13 @@ namespace LagoVista.IoT.Logging
         public void EndTimedEvent(TimedEvent evt)
         {
             var duration = DateTime.Now - evt.StartTime;
-            Log(LogLevel.Message, evt.Area, evt.Description, new KeyValuePair<string, string>("Duration", Math.Round(duration.TotalSeconds,4).ToString()));
+            AddCustomEvent(LogLevel.Message, evt.Area, evt.Description, new KeyValuePair<string, string>("Duration", Math.Round(duration.TotalSeconds,4).ToString()));
         }
 
 
         /* Want to capture the concept of subscribing to messages from specific devices */
 
-        public void Log(LogLevel level, string area, string message, params KeyValuePair<string, string>[] args)
+        public void AddCustomEvent(LogLevel level, string area, string message, params KeyValuePair<string, string>[] args)
         {
             Debug.WriteLine("==========================================================");
             Debug.WriteLine("Level               :" + level);
@@ -36,7 +36,7 @@ namespace LagoVista.IoT.Logging
             Debug.WriteLine("");
         }
 
-        public void LogException(string area, Exception ex, params KeyValuePair<string, string>[] args)
+        public void AddException(string area, Exception ex, params KeyValuePair<string, string>[] args)
         {
             Debug.WriteLine("==========================================================");
             Debug.WriteLine("Area                :" + area);
@@ -52,7 +52,7 @@ namespace LagoVista.IoT.Logging
             Debug.WriteLine("");
         }
 
-        public void SetKeys(params KeyValuePair<string, string>[] args)
+        public void AddKVPs(params KeyValuePair<string, string>[] args)
         {
 
         }

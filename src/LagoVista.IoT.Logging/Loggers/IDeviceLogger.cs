@@ -1,18 +1,16 @@
-﻿using System;
+﻿using LagoVista.Core.PlatformSupport;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.IoT.Logging.Loggers
 {
-    public interface IDeviceLogger
+    public interface IDeviceLogger : ILogger
     {
         String HostId { get; }
         string InstanceId { get; }
 
-
-        String InstrumentationKey { get; }
-
-        void AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel level, string tag, string deviceTypeId, string deviceId, string customEvent, params KeyValuePair<string, string>[] args);
+        
         /* Log performance */
         void AddMetric(string deviceTypeId, string deviceId, string measure, double duration);
 
@@ -26,8 +24,6 @@ namespace LagoVista.IoT.Logging.Loggers
         void AddError(string deviceTypeId, string deviceId, ErrorCode errorCode, params KeyValuePair<string, string>[] args);
 
         void AddConfigurationError(string deviceTypeId, string deviceId, string configurationSetting, string error, params KeyValuePair<string, string>[] args);
-
-        void AddException(string deviceTypeId, string deviceId, string tag, Exception ex, params KeyValuePair<string, string>[] args);
 
     }
 }
