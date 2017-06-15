@@ -10,5 +10,16 @@ namespace LagoVista.IoT.Logging.Loggers
         string HostInstrumentationKey { get; }
         string InstanceInstrumentationKey { get; }
         string DeviceInstrumentationKey { get; }
+
+        String AdminAppId { get; }
+        String HostAppId { get; }
+        String InstanceAppId { get; }
+        String DeviceAppId { get; }
+
+        String AdminAPIKey { get; }
+
+        String HostAPIKey { get; }
+        String InstanceAPIKey { get; }
+        String DeviceAPIKey { get; }
     }
 }
