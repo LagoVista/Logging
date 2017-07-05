@@ -3,6 +3,6 @@
     <TargetFramework>netstandard1.2</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="1.2.48-alpha1640" />
+    <PackageReference Include="LagoVista.Core" Version="1.2.49-alpha0527" />
   </ItemGroup>
 </Project>
