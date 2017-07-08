@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,5 +18,8 @@ namespace LagoVista.IoT.Logging.Loggers
         void AddMetric(string measure, double duration);
 
         void AddMetric(string measure, int count);
+
+        void LogInvokeResult(string tag, InvokeResult result, params KeyValuePair<string, string>[] args);
+        void LogInvokeResult<TResultType>(string tag, InvokeResult<TResultType> result, params KeyValuePair<string, string>[] args);
     }
 }
