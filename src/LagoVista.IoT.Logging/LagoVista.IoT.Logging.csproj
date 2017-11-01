@@ -4,6 +4,6 @@
     <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="1.2.163-alpha0901" />
+    <PackageReference Include="LagoVista.Core" Version="1.2.168-alpha0845" />
   </ItemGroup>
 </Project>

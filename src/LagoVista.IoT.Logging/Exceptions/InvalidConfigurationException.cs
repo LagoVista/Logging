@@ -33,7 +33,7 @@ namespace LagoVista.IoT.Logging.Exceptions
         {
             Error = errorCode.ToError();
             Error.ConfigurationId = id;
-            Error.ConfiguratinType = configurationType.FullName;
+            Error.ConfigurationType = configurationType.FullName;
             Error.Details = details;
         }
 

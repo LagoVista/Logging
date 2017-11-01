@@ -8,10 +8,10 @@ namespace LagoVista.IoT.Logging
     {
         public string InstanceHostId { get; set; }
         public string InstanceId { get; set; }
-        public string DeploymnetId { get; set; }
+        public string DeploymentId { get; set; }
         public string DeviceConfigurationId { get; set; }
 
-        public string ConfiguratinType { get; set; }
+        public string ConfigurationType { get; set; }
         public string ConfigurationId { get; set; }
         public string DeviceId { get; set; }
 
