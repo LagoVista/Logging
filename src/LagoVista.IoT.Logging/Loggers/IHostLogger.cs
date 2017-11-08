@@ -17,6 +17,7 @@ namespace LagoVista.IoT.Logging.Loggers
 
    
         void AddError(string tag, string message, params KeyValuePair<string, string>[] args);
+        void AddError(ErrorCode errorCode, params KeyValuePair<string, string>[] args);
 
         void AddConfigurationError(string configurationSetting, string error, params KeyValuePair<string, string>[] args);
         
