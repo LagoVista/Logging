@@ -8,6 +8,8 @@ namespace LagoVista.IoT.Logging
 {
     public class DebugLogger : ILogger
     {
+        public bool DebugMode { get; set; } = false;
+
         public TimedEvent StartTimedEvent(string area, string description)
         {
             return new TimedEvent(area, description);
