@@ -7,12 +7,7 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public class HostLogger : LoggerBase, IHostLogger
     {
-        public HostLogger(ILogWriter writer) : base(writer)
-        {
-
-        }
-
-        public void Init(string hostId)
+        public HostLogger(string hostId, ILogWriter writer) : base(writer)
         {
             HostId = hostId;
         }
@@ -30,9 +25,18 @@ namespace LagoVista.IoT.Logging.Loggers
             log.HostId = HostId;
         }
 
-        public void AddError(ErrorCode errorCode, params KeyValuePair<string, string>[] args)
+        public async void AddError(ErrorCode errorCode, params KeyValuePair<string, string>[] args)
         {
-            throw new NotImplementedException();
+            var logRecord = new LogRecord()
+            {
+                LogLevel = "Error",
+                ErrorCode = errorCode.Code,
+                Message = errorCode.Message,
+            };
+
+            logRecord.AddKVPs(args);
+
+            await base.InsertErrorAsync(logRecord);
         }
     }
 }

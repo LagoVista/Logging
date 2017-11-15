@@ -36,7 +36,7 @@ namespace LagoVista.IoT.Logging.Loggers
 
             logRecord.AddKVPs(args);
 
-            await InsertEventAsync(logRecord);
+            await InsertErrorAsync(logRecord);
         }
 
         public async void AddError(string deviceTypeId, string deviceId, string tag, string message, params KeyValuePair<string, string>[] args)
@@ -52,7 +52,7 @@ namespace LagoVista.IoT.Logging.Loggers
 
             logRecord.AddKVPs(args);
 
-            await InsertEventAsync(logRecord);
+            await InsertErrorAsync(logRecord);
         }
 
         public async void AddError(string deviceTypeId, string deviceId, ErrorCode errorCode, params KeyValuePair<string, string>[] args)
@@ -68,7 +68,7 @@ namespace LagoVista.IoT.Logging.Loggers
 
             logRecord.AddKVPs(args);
 
-            await InsertEventAsync(logRecord);
+            await InsertErrorAsync(logRecord);
         }
 
         public async void AddMetric(string deviceTypeId, string deviceId, string measure, double duration)

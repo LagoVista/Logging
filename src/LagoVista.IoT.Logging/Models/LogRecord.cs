@@ -40,10 +40,10 @@ namespace LagoVista.IoT.Logging.Models
                 {
                     switch (arg.Key.ToLower())
                     {
-                        case "deviceId": DeviceId = arg.Value; break;
-                        case "deviceTypeId": DeviceTypeId = arg.Value; break;
-                        case "hostId": HostId = arg.Value; break;
-                        case "instanceId": InstanceId = arg.Value; break;
+                        case "deviceid": DeviceId = arg.Value; break;
+                        case "devicetypeid": DeviceTypeId = arg.Value; break;
+                        case "hostid": HostId = arg.Value; break;
+                        case "instanceid": InstanceId = arg.Value; break;
                         case "pipelinemoduleid": PipelineModuleId = arg.Value; break;
                         case "oldstate": OldState = arg.Value; break;
                         case "newstate": NewState = arg.Value; break;

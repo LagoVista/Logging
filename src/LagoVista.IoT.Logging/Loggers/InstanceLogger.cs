@@ -35,7 +35,7 @@ namespace LagoVista.IoT.Logging.Loggers
 
             logRecord.AddKVPs(args);
 
-            await InsertEventAsync(logRecord);
+            await InsertErrorAsync(logRecord);
         }
 
         protected override void SetRecordIdentifiers(LogRecord log)

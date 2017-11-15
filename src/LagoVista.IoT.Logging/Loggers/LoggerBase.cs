@@ -12,7 +12,7 @@ namespace LagoVista.IoT.Logging.Loggers
     {
         ILogWriter _writer;
 
-        private bool _paused;
+        private bool _paused = false;
 
         public LoggerBase(ILogWriter writer)
         {
@@ -23,6 +23,7 @@ namespace LagoVista.IoT.Logging.Loggers
         {
             if (!_paused)
             {
+                SetRecordIdentifiers(log);
                 await _writer.WriteEvent(log);
             }
         }
@@ -31,6 +32,7 @@ namespace LagoVista.IoT.Logging.Loggers
         {
             if (!_paused)
             {
+                SetRecordIdentifiers(log);
                 await _writer.WriteError(log);
             }
         }
@@ -45,8 +47,15 @@ namespace LagoVista.IoT.Logging.Loggers
             };
 
             logRecord.AddKVPs(args);
-
-            await InsertEventAsync(logRecord);
+            if (level == LogLevel.Error ||
+                level == LogLevel.ConfigurationError)
+            {
+                await InsertErrorAsync(logRecord);
+            }
+            else
+            {
+                await InsertEventAsync(logRecord);
+            }
         }
 
         protected abstract void SetRecordIdentifiers(LogRecord log);
