@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LagoVista.IoT.Logging.Models
 {
-    public class LogRecord : TableStorageEntity
+    public class LogRecord
     {
         public LogRecord()
         {
