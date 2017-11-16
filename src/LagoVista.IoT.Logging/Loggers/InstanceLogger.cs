@@ -7,15 +7,18 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public class InstanceLogger : LoggerBase, IInstanceLogger
     {
-        public InstanceLogger(ILogWriter writer, string hostId, string instanceId) : base(writer)
+        public InstanceLogger(ILogWriter writer, string hostId, string version, string instanceId) : base(writer)
         {
             HostId = hostId;
             InstanceId = instanceId;
+            Version = version;
         }
 
         public string DeviceInstrumentationKey => throw new NotImplementedException();
 
         public string HostId { get; private set; }
+
+        public string Version { get; private set; }
 
         public string InstanceId { get; private set; }
 
@@ -42,6 +45,7 @@ namespace LagoVista.IoT.Logging.Loggers
         {
             log.HostId = HostId;
             log.InstanceId = InstanceId;
+            log.Version = Version;
         }
     }
 }

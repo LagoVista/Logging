@@ -7,9 +7,10 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public class HostLogger : LoggerBase, IHostLogger
     {
-        public HostLogger(string hostId, ILogWriter writer) : base(writer)
+        public HostLogger(string hostId, string version, ILogWriter writer) : base(writer)
         {
             HostId = hostId;
+            Version = version;
         }
 
         public string InstrumentationKey => throw new NotImplementedException();
@@ -20,9 +21,12 @@ namespace LagoVista.IoT.Logging.Loggers
 
         public string HostId { get; private set; }
 
+        public string Version { get; set; }
+
         protected override void SetRecordIdentifiers(LogRecord log)
         {
             log.HostId = HostId;
+            log.Version = Version;
         }
 
         public async void AddError(ErrorCode errorCode, params KeyValuePair<string, string>[] args)

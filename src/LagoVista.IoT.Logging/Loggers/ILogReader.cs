@@ -19,7 +19,7 @@ namespace LagoVista.IoT.Logging.Loggers
     public interface ILogReader
     {
         Task<ListResponse<LogRecord>> GetLogRecordsAsync(string resourceId, ListRequest listRequest, ResourceType resourceType = ResourceType.Any);
-
         Task<ListResponse<LogRecord>> GetErrorsAsync(string resourceId, ListRequest listRequest, ResourceType resourceType = ResourceType.Any);
+        Task<ListResponse<LogRecord>> GetAllErrorsAsync(ListRequest listRequest);
     }
 }

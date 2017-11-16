@@ -7,22 +7,19 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public class DeviceLogger : LoggerBase, IDeviceLogger
     {
-        public DeviceLogger(ILogWriter writer, string hostId, string instanceId) : base(writer)
+        public DeviceLogger(ILogWriter writer, string hostId, string instanceId, string version) : base(writer)
         {
             HostId = hostId;
             InstanceId = instanceId;
+            Version = version;
         }
 
         public string HostId { get; private set; }
 
         public string InstanceId { get; private set; }
-
-        public void InitAsync(string hostId, string instanceId)
-        {
-            HostId = hostId;
-            InstanceId = instanceId;
-        }
-
+        public string Version { get; private set; }
+    
+        
         public async void AddConfigurationError(string deviceTypeId, string deviceId, string configurationSetting, string error, params KeyValuePair<string, string>[] args)
         {
             var logRecord = new LogRecord()
@@ -117,6 +114,7 @@ namespace LagoVista.IoT.Logging.Loggers
         {
             log.HostId = HostId;
             log.InstanceId = InstanceId;
+            log.Version = Version;
         }
     }
 }
