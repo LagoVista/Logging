@@ -15,10 +15,12 @@ namespace LagoVista.IoT.Logging.Models
         public string LogLevel { get; set; }
         public string HostId { get; set; }
         public string Version { get; set; }
+        public string PemId { get; set; }
         public string InstanceId { get; set; }
         public string PipelineModuleId { get; set; }
         public string DeviceTypeId { get; set; }
         public string DeviceId { get; set; }
+        public string ActivityId { get; set; }
         public DateTime TimeStamp { get; set; }
         public string ErrorCode { get; set; }
         public string Area { get; set; }
@@ -41,6 +43,8 @@ namespace LagoVista.IoT.Logging.Models
                 {
                     switch (arg.Key.ToLower())
                     {
+                        case "pemid": PemId = arg.Value; break;
+                        case "activityid": ActivityId = arg.Value; break;
                         case "deviceid": DeviceId = arg.Value; break;
                         case "devicetypeid": DeviceTypeId = arg.Value; break;
                         case "hostid": HostId = arg.Value; break;
