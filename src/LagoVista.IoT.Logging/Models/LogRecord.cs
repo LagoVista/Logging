@@ -12,6 +12,7 @@ namespace LagoVista.IoT.Logging.Models
         {
         }
 
+        public string Id { get; set; }
         public string LogLevel { get; set; }
         public string HostId { get; set; }
         public string Version { get; set; }
