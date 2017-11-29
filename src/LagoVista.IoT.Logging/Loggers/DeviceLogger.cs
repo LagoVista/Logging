@@ -7,7 +7,7 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public class DeviceLogger : LoggerBase, IDeviceLogger
     {
-        public DeviceLogger(ILogWriter writer, string hostId, string instanceId, string version) : base(writer)
+        public DeviceLogger(ILogWriter writer, string hostId, string version, string instanceId) : base(writer)
         {
             HostId = hostId;
             InstanceId = instanceId;

@@ -54,9 +54,9 @@ namespace LagoVista.IoT.Logging.Models
                         case "oldstate": OldState = arg.Value; break;
                         case "newstate": NewState = arg.Value; break;
                         case "message": Message = arg.Value; break;
+                        case "version": Version = arg.Value; break;
                         default: dict.Add(arg.Key, arg.Value); break;
                     }
-
                 }
 
                 Details = JsonConvert.SerializeObject(dict);
