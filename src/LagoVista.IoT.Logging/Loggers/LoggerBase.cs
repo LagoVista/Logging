@@ -47,8 +47,7 @@ namespace LagoVista.IoT.Logging.Loggers
             };
 
             logRecord.AddKVPs(args);
-            if (level == LogLevel.Error ||
-                level == LogLevel.ConfigurationError)
+            if (level == LogLevel.Error || level == LogLevel.ConfigurationError)
             {
                 await InsertErrorAsync(logRecord);
             }
