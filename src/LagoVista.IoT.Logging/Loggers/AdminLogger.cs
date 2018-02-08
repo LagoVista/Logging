@@ -10,9 +10,16 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public class AdminLogger : LoggerBase, IAdminLogger
     {
+        string _hostId;
+
         public AdminLogger(ILogWriter writer) : base(writer)
         {
 
+        }
+
+        public AdminLogger(ILogWriter writer, string hostId) : base(writer)
+        {
+            _hostId = hostId;
         }
 
         public async void AddError(ErrorCode errorCode, params KeyValuePair<string, string>[] args)
@@ -68,6 +75,12 @@ namespace LagoVista.IoT.Logging.Loggers
             LogInvokeResult(tag, result.ToInvokeResult(), args);
         }
 
-        protected override void SetRecordIdentifiers(LogRecord log) { }
+        protected override void SetRecordIdentifiers(LogRecord log)
+        {
+            if (!String.IsNullOrEmpty(_hostId))
+            {
+                log.HostId = _hostId;
+            }
+        }
     }
 }
