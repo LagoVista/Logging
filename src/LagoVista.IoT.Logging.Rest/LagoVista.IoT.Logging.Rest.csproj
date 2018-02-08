@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="LagoVista.UserAdmin" Version="1.2.267-alpha1235" />
+    <PackageReference Include="LagoVista.IoT.Web.Common" Version="1.2.267-alpha1235" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1-beta3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LagoVista.IoT.Logging\LagoVista.IoT.Logging.csproj" />
+  </ItemGroup>
+</Project>
