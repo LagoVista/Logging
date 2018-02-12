@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace LagoVista.IoT.Logging.Loggers
 {
@@ -37,36 +38,42 @@ namespace LagoVista.IoT.Logging.Loggers
 
         public async void LogInvokeResult(string tag, InvokeResult result, params KeyValuePair<string, string>[] args)
         {
-            var logRecord = new LogRecord()
+            try
             {
-                Tag = tag,
-            };
+                var logRecord = new LogRecord()
+                {
+                    Tag = tag,
+                };
 
-            var firstError = result.Errors.FirstOrDefault();
-            if (firstError != null)
-            {
-                logRecord.ErrorCode = firstError.ErrorCode;
-                logRecord.Message = firstError.Message;
-            }
+                var firstError = result.Errors.FirstOrDefault();
+                if (firstError != null)
+                {
+                    logRecord.ErrorCode = firstError.ErrorCode;
+                    logRecord.Message = firstError.Message;
 
-            if (result.Errors.Count > 1)
-            {
-                logRecord.Details = JsonConvert.SerializeObject(result.Errors);
-            }
-            else
-            {
-                logRecord.Details = firstError.Details;
-            }
+                    if (result.Errors.Count > 1)
+                    {
+                        logRecord.Details = JsonConvert.SerializeObject(result.Errors);
+                    }
+                    else
+                    {
+                        logRecord.Details = firstError.Details;
+                    }
+                }
 
-
-            logRecord.AddKVPs(args);
-            if (result.Successful)
-            {
-                await InsertEventAsync(logRecord);
+                logRecord.AddKVPs(args);
+                if (result.Successful)
+                {
+                    await InsertEventAsync(logRecord);
+                }
+                else
+                {
+                    await InsertErrorAsync(logRecord);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await InsertErrorAsync(logRecord);
+                AddException(tag, ex);
             }
         }
 
