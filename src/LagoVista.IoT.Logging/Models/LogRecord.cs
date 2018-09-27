@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace LagoVista.IoT.Logging.Models
 {
-    public class LogRecord
+    public class LogRecord: IIDEntity
     {
         public LogRecord()
         {
