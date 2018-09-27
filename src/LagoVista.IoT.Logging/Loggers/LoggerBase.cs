@@ -10,7 +10,7 @@ namespace LagoVista.IoT.Logging.Loggers
 {
     public abstract class LoggerBase : ILogger
     {
-        ILogWriter _writer;
+        protected readonly ILogWriter _writer;
 
         private bool _paused = false;
 
