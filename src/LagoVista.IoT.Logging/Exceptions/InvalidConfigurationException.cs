@@ -7,12 +7,12 @@ namespace LagoVista.IoT.Logging.Exceptions
 {
     public class InvalidConfigurationException : Exception
     {
-        public InvalidConfigurationException(Error errorCode)
+        public InvalidConfigurationException(Error errorCode) : base(errorCode.Message)
         {
             Error = errorCode;
         }
 
-        public InvalidConfigurationException(Error errorCode, string details)
+        public InvalidConfigurationException(Error errorCode, string details) : base(errorCode.Message)
         {
             Error = errorCode;
             Error.Details = details;
@@ -23,13 +23,13 @@ namespace LagoVista.IoT.Logging.Exceptions
 
         }
 
-        public InvalidConfigurationException(ErrorCode errorCode, string details)
+        public InvalidConfigurationException(ErrorCode errorCode, string details) : base(errorCode.Message)
         {
             Error = errorCode.ToError();
             Error.Details = details;
         }
 
-        public InvalidConfigurationException(ErrorCode errorCode, Type configurationType, string id, string details = "")
+        public InvalidConfigurationException(ErrorCode errorCode, Type configurationType, string id, string details = "") : base(errorCode.Message)
         {
             Error = errorCode.ToError();
             Error.ConfigurationId = id;
