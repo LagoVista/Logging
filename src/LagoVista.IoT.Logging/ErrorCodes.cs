@@ -8,23 +8,23 @@ using System.Text;
 namespace LagoVista.IoT.Logging
 {
 
-    public static class ErrorCodes
-    {
-        static Dictionary<string, ErrorCode> _errorCodes = new Dictionary<string, ErrorCode>();
+	public static class ErrorCodes
+	{
+		static Dictionary<string, ErrorCode> _errorCodes = new Dictionary<string, ErrorCode>();
 
-        public static void Register(Type errorCodeType)
-        {
+		public static void Register(Type errorCodeType)
+		{
+			foreach (var prop in errorCodeType.GetRuntimeProperties())
+			{
+				if (prop.PropertyType == typeof(ErrorCode))
+				{
+					var errorCode = prop.GetValue(null) as ErrorCode;
+					if (!_errorCodes.ContainsKey(errorCode.Code))
+						_errorCodes.Add(errorCode.Code, errorCode);
+				}
+			}
+		}
 
-            foreach(var prop in errorCodeType.GetRuntimeProperties())
-            {
-                if(prop.PropertyType == typeof(ErrorCode))
-                {
-                    var errorCode = (prop.GetValue(null) as ErrorCode);
-                    _errorCodes.Add(errorCode.Code, errorCode);
-                }
-            }
-        }
-
-        public static Dictionary<string, ErrorCode> Codes { get { return _errorCodes; } }
-    }
+		public static Dictionary<string, ErrorCode> Codes { get { return _errorCodes; } }
+	}
 }
