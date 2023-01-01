@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using Newtonsoft.Json;
 using System;
@@ -11,6 +12,9 @@ namespace LagoVista.IoT.Logging.Models
     {
         public LogRecord()
         {
+
+            Id = Guid.NewGuid().ToId();
+            TimeStamp = DateTime.UtcNow;
         }
 
         public string Id { get; set; }

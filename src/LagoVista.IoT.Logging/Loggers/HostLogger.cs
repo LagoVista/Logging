@@ -33,9 +33,13 @@ namespace LagoVista.IoT.Logging.Loggers
         {
             var logRecord = new LogRecord()
             {
+                Id = Guid.NewGuid().ToString(),
+                TimeStamp = DateTime.UtcNow,
                 LogLevel = "Error",
                 ErrorCode = errorCode.Code,
                 Message = errorCode.Message,
+                HostId = HostId,
+                Version = Version,
             };
 
             logRecord.AddKVPs(args);
