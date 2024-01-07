@@ -8,7 +8,7 @@ using System.Text;
 
 namespace LagoVista.IoT.Logging.Models
 {
-    public class LogRecord: IIDEntity
+    public class LogRecord : IIDEntity
     {
         public LogRecord()
         {
@@ -47,20 +47,28 @@ namespace LagoVista.IoT.Logging.Models
 
                 foreach (var arg in args)
                 {
-                    switch (arg.Key.ToLower())
+                    if (dict.ContainsKey(arg.Key))
                     {
-                        case "pemid": PemId = arg.Value; break;
-                        case "activityid": ActivityId = arg.Value; break;
-                        case "deviceid": DeviceId = arg.Value; break;
-                        case "devicetypeid": DeviceTypeId = arg.Value; break;
-                        case "hostid": HostId = arg.Value; break;
-                        case "instanceid": InstanceId = arg.Value; break;
-                        case "pipelinemoduleid": PipelineModuleId = arg.Value; break;
-                        case "oldstate": OldState = arg.Value; break;
-                        case "newstate": NewState = arg.Value; break;
-                        case "message": Message = arg.Value; break;
-                        case "version": Version = arg.Value; break;
-                        default: dict.Add(arg.Key, arg.Value); break;
+                        var dupKeyName = $"-dup-{Guid.NewGuid().ToId()}";
+                        dict.Add(dupKeyName, arg.Value);
+                    }
+                    else
+                    {
+                        switch (arg.Key.ToLower())
+                        {
+                            case "pemid": PemId = arg.Value; break;
+                            case "activityid": ActivityId = arg.Value; break;
+                            case "deviceid": DeviceId = arg.Value; break;
+                            case "devicetypeid": DeviceTypeId = arg.Value; break;
+                            case "hostid": HostId = arg.Value; break;
+                            case "instanceid": InstanceId = arg.Value; break;
+                            case "pipelinemoduleid": PipelineModuleId = arg.Value; break;
+                            case "oldstate": OldState = arg.Value; break;
+                            case "newstate": NewState = arg.Value; break;
+                            case "message": Message = arg.Value; break;
+                            case "version": Version = arg.Value; break;
+                            default: dict.Add(arg.Key, arg.Value); break;
+                        }
                     }
                 }
 
