@@ -1,6 +1,8 @@
 ﻿using LagoVista.Core;
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.IoT.Logging.Resources;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,9 @@ using System.Text;
 
 namespace LagoVista.IoT.Logging.Models
 {
+    [EntityDescription(LoggingDomain.Logging, LoggingResources.Names.LogRecords_Title, LoggingResources.Names.LogRecord_Description,
+       LoggingResources.Names.LogRecord_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(LoggingResources),
+        Icon: "icon-fo-list")]
     public class LogRecord : IIDEntity
     {
         public LogRecord()
