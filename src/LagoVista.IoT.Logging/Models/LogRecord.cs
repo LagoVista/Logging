@@ -12,7 +12,7 @@ namespace LagoVista.IoT.Logging.Models
 {
     [EntityDescription(LoggingDomain.Logging, LoggingResources.Names.LogRecords_Title, LoggingResources.Names.LogRecord_Description,
        LoggingResources.Names.LogRecord_Description, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(LoggingResources),
-        Icon: "icon-fo-list")]
+        ListUIUrl: "/sysadmin/areas/logs", Icon: "icon-ae-coding-laptop")]
     public class LogRecord : IIDEntity
     {
         public LogRecord()
