@@ -2,27 +2,27 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.Logging</id>
-    <version>3.0.1963.1145</version>
+    <version>3.0.2532.1233</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Provides Logging and Error Reporing Implementations for the LagoVista Devices, IoT and Home Automation Frameworks.</description>
-    <copyright>Copyright Software Logistics - 2022</copyright>
+    <copyright>Copyright Software Logistics - 2024</copyright>
     <tags>HomeAutomation IoT Cloud LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 10/1/2022 3:45:22 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 4/22/2024 4:33:56 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
-      <group targetFramework="netstandard1.2">
-        <dependency id="LagoVista.Core" version="3.0.1963.1145" />
+      <group targetFramework="netstandard2.1">
+        <dependency id="LagoVista.Core" version="3.0.2532.1233" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard1.2\LagoVista.IoT.Logging.dll" target="lib\netstandard1.2\LagoVista.IoT.Logging.dll" />
-    <file src="bin\release\netstandard1.2\LagoVista.IoT.Logging.pdb" target="lib\netstandard1.2\LagoVista.IoT.Logging.pdb" />
+    <file src="bin\release\netstandard2.1\LagoVista.IoT.Logging.dll" target="lib\netstandard2.1\LagoVista.IoT.Logging.dll" />
+    <file src="bin\release\netstandard2.1\LagoVista.IoT.Logging.pdb" target="lib\netstandard2.1\LagoVista.IoT.Logging.pdb" />
   </files>
 </package>
