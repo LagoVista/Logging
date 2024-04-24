@@ -85,5 +85,10 @@ namespace LagoVista.IoT.Logging
         {
       
         }
+
+        public void Trace(string message)
+        {
+            Debug.WriteLine($"[TRACE] - {message}");
+        }
     }
 }

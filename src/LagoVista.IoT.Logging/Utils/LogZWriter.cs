@@ -1,13 +1,19 @@
 ﻿using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Logging.Models;
-using NLog;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Logzio.DotNet.NLog;
+using NLog;
+using NLog.Config;
+using NLog.Fluent;
+using System;
 
 namespace LagoVista.IoT.Logging.Utils
 {
     public class LogZWriter : ILogWriter
     {
         Logger _logger;
+        ConsoleLogWriter _consoleLogWriter = new ConsoleLogWriter();
 
         public LogZWriter()
         {
@@ -16,14 +22,77 @@ namespace LagoVista.IoT.Logging.Utils
 
         public Task WriteError(LogRecord record)
         {
-            _logger.Error(record.Message);
+            var msg = _logger.Error();
+            msg.Message(record.Message);
+
+            if (!String.IsNullOrEmpty(record.Tag))
+            {
+                if (!record.Tag.StartsWith("["))
+                    record.Tag = "[" + record.Tag;
+
+                if (!record.Tag.EndsWith("]"))
+                    record.Tag += "]";
+
+                msg.Property("nuviotTag", record.Tag);
+            }
+                       
+            if (!String.IsNullOrEmpty(record.HostId)) msg.Property(nameof(LogRecord.HostId), record.HostId);
+            if (!String.IsNullOrEmpty(record.InstanceId)) msg.Property(nameof(LogRecord.InstanceId), record.InstanceId);
+            if (!String.IsNullOrEmpty(record.Area)) msg.Property(nameof(LogRecord.Area), record.Area);
+            if (!String.IsNullOrEmpty(record.Version)) msg.Property("nuviotVersion", record.Version);
+            if (!String.IsNullOrEmpty(record.OldState)) msg.Property(nameof(LogRecord.OldState), record.OldState);
+            if (!String.IsNullOrEmpty(record.NewState)) msg.Property(nameof(LogRecord.NewState), record.NewState);
+            if (!String.IsNullOrEmpty(record.StackTrace)) msg.Property("nuviotStackTrace", record.StackTrace);
+
+            foreach (var prop in record.Parameters)
+                msg.Property(prop.Key, prop.Value);
+
+            msg.Write();
+
+            _consoleLogWriter.WriteError(record);
+
             return Task.CompletedTask;
         }
 
         public Task WriteEvent(LogRecord record)
         {
-            _logger.Info(record.Message);
-            return Task.CompletedTask;
+            if (record.LogLevel?.ToLower() == "trace")
+            {
+                _logger.Trace(record.Message);
+            }
+            else
+            {
+                var msg = _logger.Info()
+                  .Message(record.Message);
+
+                if (!String.IsNullOrEmpty(record.Tag))
+                {
+                    if (!record.Tag.StartsWith("["))
+                        record.Tag = "[" + record.Tag;
+
+                    if (!record.Tag.EndsWith("]"))
+                        record.Tag += "]";
+
+                    msg.Property("nuviotTag", record.Tag);
+                }
+
+                if (!String.IsNullOrEmpty(record.HostId)) msg.Property(nameof(LogRecord.HostId), record.HostId);
+                if (!String.IsNullOrEmpty(record.InstanceId)) msg.Property(nameof(LogRecord.InstanceId), record.InstanceId);
+                if (!String.IsNullOrEmpty(record.Area)) msg.Property(nameof(LogRecord.Area), record.Area);
+                if (!String.IsNullOrEmpty(record.Version)) msg.Property("nuviotVersion", record.Version);
+                if (!String.IsNullOrEmpty(record.OldState)) msg.Property(nameof(LogRecord.OldState), record.OldState);
+                if (!String.IsNullOrEmpty(record.NewState)) msg.Property(nameof(LogRecord.NewState), record.NewState);
+
+                foreach (var prop in record.Parameters)
+                {
+                    msg.Property(prop.Key, prop.Value);
+                }
+                    
+                msg.Write();
+            }
+                _consoleLogWriter.WriteEvent(record);
+
+                return Task.CompletedTask;            
         }
     }
 }

@@ -44,18 +44,20 @@ namespace LagoVista.IoT.Logging.Models
         public string OldState { get; set; }
         public string NewState { get; set; }
 
+        public Dictionary<string, string> Parameters { get; set; } = new Dictionary<string, string>();
+
         public void AddKVPs(KeyValuePair<string, string>[] args)
         {
             if (args != null && args.Length > 0)
             {
-                var dict = new Dictionary<string, string>();
+                Parameters = new Dictionary<string, string>();
 
                 foreach (var arg in args)
                 {
-                    if (dict.ContainsKey(arg.Key))
+                    if (Parameters.ContainsKey(arg.Key))
                     {
                         var dupKeyName = $"-dup-{Guid.NewGuid().ToId()}";
-                        dict.Add(dupKeyName, arg.Value);
+                        Parameters.Add(dupKeyName, arg.Value);
                     }
                     else
                     {
@@ -72,12 +74,12 @@ namespace LagoVista.IoT.Logging.Models
                             case "newstate": NewState = arg.Value; break;
                             case "message": Message = arg.Value; break;
                             case "version": Version = arg.Value; break;
-                            default: dict.Add(arg.Key, arg.Value); break;
+                            default: Parameters.Add(arg.Key, arg.Value); break;
                         }
                     }
                 }
 
-                Details = JsonConvert.SerializeObject(dict);
+                Details = JsonConvert.SerializeObject(Parameters);
             }
         }
     }

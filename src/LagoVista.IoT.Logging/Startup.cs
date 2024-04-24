@@ -10,8 +10,6 @@ namespace LagoVista.IoT.Logging
 {
     public class Startup
     {
-        
-
         public static ILogWriter CreateLogZWriter(IConfigurationRoot configurationRoot)
         {
             var section = configurationRoot.GetSection("LogzIO");
@@ -25,17 +23,18 @@ namespace LagoVista.IoT.Logging
                 Name = "Logzio",
                 Token = token,
                 LogzioType = "nlog",
-                ListenerUrl = "listener.logz.io:8071",
+                ListenerUrl = "https://listener.logz.io:8071",
                 BufferSize = 100,
                 BufferTimeout = TimeSpan.Parse("00:00:05"),
                 RetriesMaxAttempts = 3,
                 RetriesInterval = TimeSpan.Parse("00:00:02"),
-                Debug = false,
+                Debug = true,
                 JsonKeysCamelCase = false,
                 AddTraceContext = false,
-            };
+            };            
 
-            config.AddRule(NLog.LogLevel.Debug, NLog.LogLevel.Fatal, target);
+            config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, target);
+            
             LogManager.Configuration = config;
 
             return new Utils.LogZWriter();

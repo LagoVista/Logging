@@ -103,6 +103,15 @@ namespace LagoVista.IoT.Logging.Loggers
 
         }
 
+        public async void Trace(string message)
+        {
+            await InsertEventAsync(new LogRecord()
+            {
+                LogLevel = "Trace",
+                Message = message
+            });
+        }
+
         public async void TrackEvent(string message, Dictionary<string, string> parameters)
         {
             var logRecord = new LogRecord()
