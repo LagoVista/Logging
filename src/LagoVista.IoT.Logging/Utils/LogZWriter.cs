@@ -1,12 +1,10 @@
 ﻿using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Logging.Models;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Logzio.DotNet.NLog;
 using NLog;
-using NLog.Config;
 using NLog.Fluent;
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LagoVista.IoT.Logging.Utils
 {
@@ -15,9 +13,16 @@ namespace LagoVista.IoT.Logging.Utils
         Logger _logger;
         ConsoleLogWriter _consoleLogWriter = new ConsoleLogWriter();
 
-        public LogZWriter()
+        private readonly string _appName;
+        private readonly string _version;
+        private readonly string _environment;
+
+        public LogZWriter(string version, string appName, string environment)
         {
             _logger = LogManager.GetCurrentClassLogger();
+            _appName = appName;
+            _version = version;
+            _environment = environment;
         }
 
         public Task WriteError(LogRecord record)
@@ -43,6 +48,10 @@ namespace LagoVista.IoT.Logging.Utils
             if (!String.IsNullOrEmpty(record.OldState)) msg.Property(nameof(LogRecord.OldState), record.OldState);
             if (!String.IsNullOrEmpty(record.NewState)) msg.Property(nameof(LogRecord.NewState), record.NewState);
             if (!String.IsNullOrEmpty(record.StackTrace)) msg.Property("nuviotStackTrace", record.StackTrace);
+
+            msg.Property("nuviotApp", _appName);
+            msg.Property("nuviotVersion", _version);
+            msg.Property("nuviotEnvironment", _environment);
 
             foreach (var prop in record.Parameters)
                 msg.Property(prop.Key, prop.Value);
@@ -75,6 +84,11 @@ namespace LagoVista.IoT.Logging.Utils
 
                     msg.Property("nuviotTag", record.Tag);
                 }
+
+                msg.Property("nuviotApp", _appName);
+                msg.Property("nuviotVersion", _version);
+                msg.Property("nuviotEnvironment", _environment);
+
 
                 if (!String.IsNullOrEmpty(record.HostId)) msg.Property(nameof(LogRecord.HostId), record.HostId);
                 if (!String.IsNullOrEmpty(record.InstanceId)) msg.Property(nameof(LogRecord.InstanceId), record.InstanceId);

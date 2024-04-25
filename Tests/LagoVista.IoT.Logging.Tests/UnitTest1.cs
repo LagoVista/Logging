@@ -15,7 +15,7 @@ namespace LagoVista.IoT.Logging.Tests
             var section = root.GetSection("LogZIO");
             
 
-            _writer = Startup.CreateLogZWriter(root);
+            _writer = Startup.CreateLogZWriter(root,"1.1.1", "test", "test");
             
         }
 

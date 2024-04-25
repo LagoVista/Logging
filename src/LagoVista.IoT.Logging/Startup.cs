@@ -10,11 +10,10 @@ namespace LagoVista.IoT.Logging
 {
     public class Startup
     {
-        public static ILogWriter CreateLogZWriter(IConfigurationRoot configurationRoot)
+        public static ILogWriter CreateLogZWriter(IConfigurationRoot configurationRoot, string version, string app, string environment)
         {
             var section = configurationRoot.GetSection("LogzIO");
             var token = "lDClQlWGOpREionETTlFfJsqswNbNysd";// section["Token"];
-            var environment = section["Environment"];
 
             var config = new LoggingConfiguration();
 
@@ -37,7 +36,7 @@ namespace LagoVista.IoT.Logging
             
             LogManager.Configuration = config;
 
-            return new Utils.LogZWriter();
+            return new Utils.LogZWriter(version, app, environment);
         }
 
         public static ILogReader CreateLogZReader(IConfigurationRoot configurationRoot)
