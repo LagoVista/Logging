@@ -65,12 +65,12 @@ namespace LagoVista.IoT.Logging.Utils
 
         public Task WriteEvent(LogRecord record)
         {
-            if (record.LogLevel?.ToLower() == "trace")
-            {
-                _logger.Trace(record.Message);
-            }
-            else
-            {
+            //if (record.LogLevel?.ToLower() == "trace")
+            //{
+            //    _logger.Trace(record.Message);
+            //}
+            //else
+            //{
                 var msg = _logger.Info()
                   .Message(record.Message);
 
@@ -103,10 +103,10 @@ namespace LagoVista.IoT.Logging.Utils
                 }
                     
                 msg.Write();
-            }
-                _consoleLogWriter.WriteEvent(record);
+            //}
+               _consoleLogWriter.WriteEvent(record);
 
-                return Task.CompletedTask;            
+               return Task.CompletedTask;            
         }
     }
 }
