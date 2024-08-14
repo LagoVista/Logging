@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.IoT.Logging</id>
-    <version>3.0.2532.1233</version>
+    <version>3.0.2646.1636</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,11 +12,12 @@
     <copyright>Copyright Software Logistics - 2024</copyright>
     <tags>HomeAutomation IoT Cloud LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 4/22/2024 4:33:56 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 8/14/2024 8:36:12 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.Core" version="3.0.2532.1233" />
+        <dependency id="LagoVista.Core" version="3.0.2646.1636" />
+        <dependency id="Logzio.DotNet.NLog" version="1.1.0" />
       </group>
     </dependencies>
   </metadata>
