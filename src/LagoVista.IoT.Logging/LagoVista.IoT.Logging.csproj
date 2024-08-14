@@ -6,7 +6,7 @@
     <AssemblyOriginatorKeyFile>lagovista.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LagoVista.Core" Version="3.0.2646.1636" />
+    <PackageReference Include="LagoVista.Core" Version="3.0.2646.1931" />
     <PackageReference Include="Logzio.DotNet.NLog" Version="1.2.0" />
   </ItemGroup>
   <ItemGroup>
