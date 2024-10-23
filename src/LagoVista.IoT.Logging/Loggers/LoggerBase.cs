@@ -1,9 +1,12 @@
-﻿using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core.Compare;
+using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Logging.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Logging.Loggers
@@ -14,9 +17,12 @@ namespace LagoVista.IoT.Logging.Loggers
 
         private bool _paused = false;
 
-        public LoggerBase(ILogWriter writer)
+        IBackgroundServiceTaskQueue _taskQueue;
+
+        public LoggerBase(ILogWriter writer, IBackgroundServiceTaskQueue backgroundTaskQueue = null)
         {
             _writer = writer;
+            _taskQueue = backgroundTaskQueue;
         }
 
         protected async Task InsertEventAsync(Logging.Models.LogRecord log)
@@ -37,7 +43,51 @@ namespace LagoVista.IoT.Logging.Loggers
             }
         }
 
-        public async void AddCustomEvent(LogLevel level, string tag, string customEvent, params KeyValuePair<string, string>[] args)
+        protected async void InsertEvent(Logging.Models.LogRecord log)
+        {
+            if (!_paused)
+            {
+                SetRecordIdentifiers(log);
+                if (_taskQueue == null)
+                {
+                    await _writer.WriteEvent(log);
+
+                }
+                else
+                {
+                    if (!_taskQueue.TryQueueBackgroundWorkItem(async (cancelToken) =>
+                    {
+                        await _writer.WriteEvent(log);
+                    }))
+                    {
+                        Console.WriteLine($"[LoggerBase__InsertError] - Could not queue work item, original message: [{log.Area}] {log.Message}");
+                    }
+                }
+            }
+        }
+
+        protected async void InsertError(Logging.Models.LogRecord log)
+        {
+            if (!_paused)
+            {
+                SetRecordIdentifiers(log);
+                if (_taskQueue == null)
+                {
+                    await _writer.WriteError(log);
+                }
+
+                if (!_taskQueue.TryQueueBackgroundWorkItem(async (cancelToken) =>
+                {
+                    await _writer.WriteError(log);
+                }))
+                {
+                    Console.WriteLine($"[LoggerBase__InsertError] - Could not queue work item, original message: [{log.Area}] {log.Message}");
+                }
+            }
+        }
+
+
+        public void AddCustomEvent(LogLevel level, string tag, string customEvent, params KeyValuePair<string, string>[] args)
         {
             var logRecord = new LogRecord()
             {
@@ -49,17 +99,17 @@ namespace LagoVista.IoT.Logging.Loggers
             logRecord.AddKVPs(args);
             if (level == LogLevel.Error || level == LogLevel.ConfigurationError)
             {
-                await InsertErrorAsync(logRecord);
+                InsertError(logRecord);
             }
             else
             {
-                await InsertEventAsync(logRecord);
+                InsertEvent(logRecord);
             }
         }
 
         protected abstract void SetRecordIdentifiers(LogRecord log);
 
-        public async void AddException(string tag, Exception ex, params KeyValuePair<string, string>[] args)
+        public void AddException(string tag, Exception ex, params KeyValuePair<string, string>[] args)
         {
             var msg = ex.Message;
 
@@ -72,17 +122,17 @@ namespace LagoVista.IoT.Logging.Loggers
             };
 
             logRecord.AddKVPs(args);
-            await InsertErrorAsync(logRecord);
+            InsertError(logRecord);
         }
 
-        public async void AddKVPs(params KeyValuePair<string, string>[] args)
+        public void AddKVPs(params KeyValuePair<string, string>[] args)
         {
             var logRecord = new LogRecord();
             logRecord.AddKVPs(args);
-            await InsertEventAsync(logRecord);
+            InsertEvent(logRecord);
         }
 
-        public async void EndTimedEvent(TimedEvent evt)
+        public void EndTimedEvent(TimedEvent evt)
         {
             var duration = DateTime.Now - evt.StartTime;
             var logRecord = new LogRecord()
@@ -93,7 +143,7 @@ namespace LagoVista.IoT.Logging.Loggers
                 Message = evt.Description
             };
 
-            await InsertEventAsync(logRecord);
+            InsertEvent(logRecord);
         }
 
         public TimedEvent StartTimedEvent(string area, string description)
@@ -103,16 +153,26 @@ namespace LagoVista.IoT.Logging.Loggers
 
         }
 
-        public async void Trace(string message)
+        public void Trace(string message)
         {
-            await InsertEventAsync(new LogRecord()
+            Console.WriteLine(message);
+
+            try
             {
-                LogLevel = "Trace",
-                Message = message
-            });
+                InsertEvent(new LogRecord()
+                {
+                    LogLevel = "Trace",
+                    Message = message
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR IN TRACE: {ex.Message} - original {message}");
+            }
         }
 
-        public async void TrackEvent(string message, Dictionary<string, string> parameters)
+
+        public void TrackEvent(string message, Dictionary<string, string> parameters)
         {
             var logRecord = new LogRecord()
             {
@@ -125,10 +185,10 @@ namespace LagoVista.IoT.Logging.Loggers
                 logRecord.Details = JsonConvert.SerializeObject(parameters);
             }
 
-            await InsertEventAsync(logRecord);
+            InsertEvent(logRecord);
         }
 
-        public async void AddConfigurationError(string configurationSetting, string error, params KeyValuePair<string, string>[] args)
+        public void AddConfigurationError(string configurationSetting, string error, params KeyValuePair<string, string>[] args)
         {
             var logRecord = new LogRecord
             {
@@ -138,10 +198,10 @@ namespace LagoVista.IoT.Logging.Loggers
             };
             logRecord.AddKVPs(args);
 
-            await InsertErrorAsync(logRecord);
+            InsertError(logRecord);
         }
 
-        public async void AddError(string tag, string message, params KeyValuePair<string, string>[] args)
+        public void AddError(string tag, string message, params KeyValuePair<string, string>[] args)
         {
             var logRecord = new LogRecord()
             {
@@ -152,10 +212,10 @@ namespace LagoVista.IoT.Logging.Loggers
 
             logRecord.AddKVPs(args);
 
-            await InsertErrorAsync(logRecord);
+            InsertError(logRecord);
         }
 
-        public async void AddMetric(string measure, double duration)
+        public void AddMetric(string measure, double duration)
         {
             var logRecord = new LogRecord()
             {
@@ -164,10 +224,10 @@ namespace LagoVista.IoT.Logging.Loggers
                 Measure = duration
             };
 
-            await InsertEventAsync(logRecord);
+            InsertEvent(logRecord);
         }
 
-        public async void AddMetric(string measure, TimeSpan duration)
+        public void AddMetric(string measure, TimeSpan duration)
         {
             var logRecord = new LogRecord()
             {
@@ -176,10 +236,10 @@ namespace LagoVista.IoT.Logging.Loggers
                 MS = duration.TotalMilliseconds,
             };
 
-            await InsertEventAsync(logRecord);
+            InsertEvent(logRecord);
         }
 
-        public async void AddMetric(string measure, int count = 1)
+        public void AddMetric(string measure, int count = 1)
         {
             var logRecord = new LogRecord()
             {
@@ -188,7 +248,7 @@ namespace LagoVista.IoT.Logging.Loggers
                 Measure = count,
             };
 
-            await InsertEventAsync(logRecord);
+            InsertEvent(logRecord);
         }
 
         public bool DebugMode { get; set; } = false;
@@ -209,7 +269,7 @@ namespace LagoVista.IoT.Logging.Loggers
 
         public void TrackMetric(string kind, string name, MetricType metricType, int count, params KeyValuePair<string, string>[] args)
         {
-  
+
         }
     }
 }
