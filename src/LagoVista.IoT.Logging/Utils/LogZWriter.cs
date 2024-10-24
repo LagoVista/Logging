@@ -93,6 +93,13 @@ namespace LagoVista.IoT.Logging.Utils
                     record.Tag += "]";
 
                 msg.Property("nuviotTag", record.Tag);
+
+                var parts = record.Tag.Split('_');
+                if (parts.Length > 1)
+                {
+                    var className = parts[0].Substring(1);
+                    msg.Property("nuviotClass", className);
+                }
             }
             else
             {
@@ -101,6 +108,13 @@ namespace LagoVista.IoT.Logging.Utils
                 if(match.Success)
                 {
                     msg.Property("nuviotTag", match.Value);
+                
+                    var parts = match.Value.Split('_');
+                    if(parts.Length > 1)
+                    {
+                        var className = parts[0].Substring(1);
+                        msg.Property("nuviotClass", className);
+                    }
                 }
             }
 
