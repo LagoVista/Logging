@@ -75,13 +75,15 @@ namespace LagoVista.IoT.Logging.Loggers
                 {
                     await _writer.WriteError(log);
                 }
-
-                if (!_taskQueue.TryQueueBackgroundWorkItem(async (cancelToken) =>
+                else
                 {
-                    await _writer.WriteError(log);
-                }))
-                {
-                    Console.WriteLine($"[LoggerBase__InsertError] - Could not queue work item, original message: [{log.Area}] {log.Message}");
+                    if (!_taskQueue.TryQueueBackgroundWorkItem(async (cancelToken) =>
+                    {
+                        await _writer.WriteError(log);
+                    }))
+                    {
+                        Console.WriteLine($"[LoggerBase__InsertError] - Could not queue work item, original message: [{log.Area}] {log.Message}");
+                    }
                 }
             }
         }
@@ -155,8 +157,6 @@ namespace LagoVista.IoT.Logging.Loggers
 
         public void Trace(string message)
         {
-            Console.WriteLine(message);
-
             try
             {
                 InsertEvent(new LogRecord()

@@ -4,8 +4,6 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
 using LagoVista.Core.Interfaces;
 
 namespace LagoVista.IoT.Logging.Loggers
@@ -14,18 +12,7 @@ namespace LagoVista.IoT.Logging.Loggers
     {
         string _hostId;
 
-        public AdminLogger(ILogWriter writer) : base(writer)
-        {
-
-        }
-
-        public AdminLogger(ILogWriter writer, IBackgroundServiceTaskQueue backgroundTaskQueue) : base(writer, backgroundTaskQueue)
-        {
-
-        }
-
-
-        public AdminLogger(ILogWriter writer, string hostId) : base(writer)
+        public AdminLogger(ILogWriter writer, string hostId = "-", IBackgroundServiceTaskQueue backgroundTaskQueue = null) : base(writer, backgroundTaskQueue)
         {
             _hostId = hostId;
         }

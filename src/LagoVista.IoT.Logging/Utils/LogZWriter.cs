@@ -5,6 +5,7 @@ using NLog;
 using NLog.Fluent;
 using System;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 
 namespace LagoVista.IoT.Logging.Utils
 {
@@ -40,7 +41,16 @@ namespace LagoVista.IoT.Logging.Utils
 
                 msg.Property("nuviotTag", record.Tag);
             }
-                       
+            else
+            {
+                var regEx = new Regex(@"\[[\w+_<>]+\]");
+                var match = regEx.Match(record.Message);
+                if (match.Success)
+                {
+                    msg.Property("nuviotTag", match.Value);
+                }
+            }
+
             if (!String.IsNullOrEmpty(record.HostId)) msg.Property(nameof(LogRecord.HostId), record.HostId);
             if (!String.IsNullOrEmpty(record.InstanceId)) msg.Property(nameof(LogRecord.InstanceId), record.InstanceId);
             if (!String.IsNullOrEmpty(record.Area)) msg.Property(nameof(LogRecord.Area), record.Area);
@@ -71,42 +81,51 @@ namespace LagoVista.IoT.Logging.Utils
             //}
             //else
             //{
-                var msg = _logger.Info()
-                  .Message(record.Message);
+            var msg = _logger.Info()
+              .Message(record.Message);
 
-                if (!String.IsNullOrEmpty(record.Tag))
+            if (!String.IsNullOrEmpty(record.Tag))
+            {
+                if (!record.Tag.StartsWith("["))
+                    record.Tag = "[" + record.Tag;
+
+                if (!record.Tag.EndsWith("]"))
+                    record.Tag += "]";
+
+                msg.Property("nuviotTag", record.Tag);
+            }
+            else
+            {
+                var regEx = new Regex(@"\[[\w+_<>]+\]");
+                var match = regEx.Match(record.Message);
+                if(match.Success)
                 {
-                    if (!record.Tag.StartsWith("["))
-                        record.Tag = "[" + record.Tag;
-
-                    if (!record.Tag.EndsWith("]"))
-                        record.Tag += "]";
-
-                    msg.Property("nuviotTag", record.Tag);
+                    msg.Property("nuviotTag", match.Value);
                 }
+            }
 
-                msg.Property("nuviotApp", _appName);
-                msg.Property("nuviotVersion", _version);
-                msg.Property("nuviotEnvironment", _environment);
+            msg.Property("nuviotApp", _appName);
+            msg.Property("nuviotVersion", _version);
+            msg.Property("nuviotEnvironment", _environment);
 
 
-                if (!String.IsNullOrEmpty(record.HostId)) msg.Property(nameof(LogRecord.HostId), record.HostId);
-                if (!String.IsNullOrEmpty(record.InstanceId)) msg.Property(nameof(LogRecord.InstanceId), record.InstanceId);
-                if (!String.IsNullOrEmpty(record.Area)) msg.Property(nameof(LogRecord.Area), record.Area);
-                if (!String.IsNullOrEmpty(record.Version)) msg.Property("nuviotVersion", record.Version);
-                if (!String.IsNullOrEmpty(record.OldState)) msg.Property(nameof(LogRecord.OldState), record.OldState);
-                if (!String.IsNullOrEmpty(record.NewState)) msg.Property(nameof(LogRecord.NewState), record.NewState);
+            if (!String.IsNullOrEmpty(record.HostId)) msg.Property(nameof(LogRecord.HostId), record.HostId);
+            if (!String.IsNullOrEmpty(record.InstanceId)) msg.Property(nameof(LogRecord.InstanceId), record.InstanceId);
+            if (!String.IsNullOrEmpty(record.Area)) msg.Property(nameof(LogRecord.Area), record.Area);
+            if (!String.IsNullOrEmpty(record.Version)) msg.Property("nuviotVersion", record.Version);
+            if (!String.IsNullOrEmpty(record.OldState)) msg.Property(nameof(LogRecord.OldState), record.OldState);
+            if (!String.IsNullOrEmpty(record.NewState)) msg.Property(nameof(LogRecord.NewState), record.NewState);
 
-                foreach (var prop in record.Parameters)
-                {
-                    msg.Property(prop.Key, prop.Value);
-                }
-                    
-                msg.Write();
+            foreach (var prop in record.Parameters)
+            {
+                msg.Property(prop.Key, prop.Value);
+            }
+
+            msg.Write();
             //}
-               _consoleLogWriter.WriteEvent(record);
+            _consoleLogWriter.WriteEvent(record);
 
-               return Task.CompletedTask;            
+            return Task.CompletedTask;
         }
     }
 }
