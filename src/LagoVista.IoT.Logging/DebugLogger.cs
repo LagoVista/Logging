@@ -86,7 +86,7 @@ namespace LagoVista.IoT.Logging
       
         }
 
-        public void Trace(string message)
+        public void Trace(string message, params KeyValuePair<string, string>[] args)
         {
             Debug.WriteLine($"[TRACE] - {message}");
         }

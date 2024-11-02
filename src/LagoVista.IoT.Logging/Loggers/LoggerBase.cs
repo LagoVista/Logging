@@ -155,15 +155,21 @@ namespace LagoVista.IoT.Logging.Loggers
 
         }
 
-        public void Trace(string message)
+        public void Trace(string message, params KeyValuePair<string, string>[] args)
         {
             try
             {
-                InsertEvent(new LogRecord()
+                var logRecord = new LogRecord()
                 {
                     LogLevel = "Trace",
-                    Message = message
-                });
+                    Message = message,
+                };
+
+                logRecord.AddKVPs(args);
+
+                InsertEvent(logRecord);
+
+
             }
             catch (Exception ex)
             {
