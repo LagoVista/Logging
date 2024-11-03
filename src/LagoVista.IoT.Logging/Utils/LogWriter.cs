@@ -23,8 +23,12 @@ namespace LagoVista.IoT.Logging.Utils
         public Task WriteEvent(LogRecord record)
         {
             Console.WriteLine($"[event] {DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
+
             if (!String.IsNullOrEmpty(record.Details))
-                Console.WriteLine(record.Details);            
+                Console.WriteLine($"\t{record.Details}");
+
+            foreach (var parameter in record.Parameters)
+                Console.WriteLine($"\t{parameter.Key}={parameter.Value}");
 
             return Task.CompletedTask;
         }

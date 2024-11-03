@@ -129,6 +129,7 @@ namespace LagoVista.IoT.Logging.Utils
             if (!String.IsNullOrEmpty(record.Version)) msg.Property("nuviotVersion", record.Version);
             if (!String.IsNullOrEmpty(record.OldState)) msg.Property(nameof(LogRecord.OldState), record.OldState);
             if (!String.IsNullOrEmpty(record.NewState)) msg.Property(nameof(LogRecord.NewState), record.NewState);
+            
 
             foreach (var prop in record.Parameters)
             {

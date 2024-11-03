@@ -50,8 +50,6 @@ namespace LagoVista.IoT.Logging.Models
         {
             if (args != null && args.Length > 0)
             {
-                Parameters = new Dictionary<string, string>();
-
                 foreach (var arg in args)
                 {
                     if (Parameters.ContainsKey(arg.Key))
