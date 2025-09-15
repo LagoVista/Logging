@@ -1,5 +1,6 @@
 using LagoVista.IoT.Logging.Loggers;
 using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
 
 namespace LagoVista.IoT.Logging.Tests
 {
