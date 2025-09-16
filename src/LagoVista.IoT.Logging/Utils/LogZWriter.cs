@@ -2,7 +2,6 @@
 using LagoVista.IoT.Logging.Models;
 using System.Threading.Tasks;
 using NLog;
-using NLog.Fluent;
 using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
@@ -28,8 +27,12 @@ namespace LagoVista.IoT.Logging.Utils
 
         public Task WriteError(LogRecord record)
         {
-            var msg = _logger.Error();
-            msg.Message(record.Message);
+
+            var logEvent = new LogEventInfo()
+            {
+                Level = LogLevel.Error,
+                Message = record.Message
+            };
 
             if (!String.IsNullOrEmpty(record.Tag))
             {
@@ -39,7 +42,7 @@ namespace LagoVista.IoT.Logging.Utils
                 if (!record.Tag.EndsWith("]"))
                     record.Tag += "]";
 
-                msg.Property("nuviotTag", record.Tag);
+                logEvent.Properties.Add("nuviotTag", record.Tag);
             }
             else
             {
@@ -47,26 +50,27 @@ namespace LagoVista.IoT.Logging.Utils
                 var match = regEx.Match(record.Message);
                 if (match.Success)
                 {
-                    msg.Property("nuviotTag", match.Value);
+                    logEvent.Properties.Add("nuviotTag", match.Value);
                 }
             }
 
-            if (!String.IsNullOrEmpty(record.HostId)) msg.Property(nameof(LogRecord.HostId), record.HostId);
-            if (!String.IsNullOrEmpty(record.InstanceId)) msg.Property(nameof(LogRecord.InstanceId), record.InstanceId);
-            if (!String.IsNullOrEmpty(record.Area)) msg.Property(nameof(LogRecord.Area), record.Area);
-            if (!String.IsNullOrEmpty(record.Version)) msg.Property("nuviotVersion", record.Version);
-            if (!String.IsNullOrEmpty(record.OldState)) msg.Property(nameof(LogRecord.OldState), record.OldState);
-            if (!String.IsNullOrEmpty(record.NewState)) msg.Property(nameof(LogRecord.NewState), record.NewState);
-            if (!String.IsNullOrEmpty(record.StackTrace)) msg.Property("nuviotStackTrace", record.StackTrace);
+            if (!String.IsNullOrEmpty(record.HostId)) logEvent.Properties.Add(nameof(LogRecord.HostId), record.HostId);
+            if (!String.IsNullOrEmpty(record.InstanceId)) logEvent.Properties.Add(nameof(LogRecord.InstanceId), record.InstanceId);
+            if (!String.IsNullOrEmpty(record.Area)) logEvent.Properties.Add(nameof(LogRecord.Area), record.Area);
+            if (!String.IsNullOrEmpty(record.Version)) logEvent.Properties.Add("nuviotVersion", record.Version);
+            if (!String.IsNullOrEmpty(record.OldState)) logEvent.Properties.Add(nameof(LogRecord.OldState), record.OldState);
+            if (!String.IsNullOrEmpty(record.NewState)) logEvent.Properties.Add(nameof(LogRecord.NewState), record.NewState);
+            if (!String.IsNullOrEmpty(record.StackTrace)) logEvent.Properties.Add("nuviotStackTrace", record.StackTrace);
 
-            msg.Property("nuviotApp", _appName);
-            msg.Property("nuviotVersion", _version);
-            msg.Property("nuviotEnvironment", _environment);
+            logEvent.Properties.Add("nuviotApp", _appName);
+            logEvent.Properties.Add("nuviotVersion", _version);
+            logEvent.Properties.Add("nuviotEnvironment", _environment);
 
             foreach (var prop in record.Parameters)
-                msg.Property(prop.Key, prop.Value);
+                logEvent.Properties.Add(prop.Key, prop.Value);
 
-            msg.Write();
+
+            _logger.Log(logEvent);
 
             _consoleLogWriter.WriteError(record);
 
@@ -81,8 +85,11 @@ namespace LagoVista.IoT.Logging.Utils
             //}
             //else
             //{
-            var msg = _logger.Info()
-              .Message(record.Message);
+            var logEvent = new LogEventInfo()
+            {
+                Level = LogLevel.Error,
+                Message = record.Message
+            };
 
             if (!String.IsNullOrEmpty(record.Tag))
             {
@@ -92,13 +99,13 @@ namespace LagoVista.IoT.Logging.Utils
                 if (!record.Tag.EndsWith("]"))
                     record.Tag += "]";
 
-                msg.Property("nuviotTag", record.Tag);
+                logEvent.Properties.Add("nuviotTag", record.Tag);
 
                 var parts = record.Tag.Split('_');
                 if (parts.Length > 1)
                 {
                     var className = parts[0].Substring(1);
-                    msg.Property("nuviotClass", className);
+                    logEvent.Properties.Add("nuviotClass", className);
                 }
             }
             else
@@ -107,37 +114,36 @@ namespace LagoVista.IoT.Logging.Utils
                 var match = regEx.Match(record.Message);
                 if(match.Success)
                 {
-                    msg.Property("nuviotTag", match.Value);
+                    logEvent.Properties.Add("nuviotTag", match.Value);
                 
                     var parts = match.Value.Split('_');
                     if(parts.Length > 1)
                     {
                         var className = parts[0].Substring(1);
-                        msg.Property("nuviotClass", className);
+                        logEvent.Properties.Add("nuviotClass", className);
                     }
                 }
             }
 
-            msg.Property("nuviotApp", _appName);
-            msg.Property("nuviotVersion", _version);
-            msg.Property("nuviotEnvironment", _environment);
+            logEvent.Properties.Add("nuviotApp", _appName);
+            logEvent.Properties.Add("nuviotVersion", _version);
+            logEvent.Properties.Add("nuviotEnvironment", _environment);
 
 
-            if (!String.IsNullOrEmpty(record.HostId)) msg.Property(nameof(LogRecord.HostId), record.HostId);
-            if (!String.IsNullOrEmpty(record.InstanceId)) msg.Property(nameof(LogRecord.InstanceId), record.InstanceId);
-            if (!String.IsNullOrEmpty(record.Area)) msg.Property(nameof(LogRecord.Area), record.Area);
-            if (!String.IsNullOrEmpty(record.Version)) msg.Property("nuviotVersion", record.Version);
-            if (!String.IsNullOrEmpty(record.OldState)) msg.Property(nameof(LogRecord.OldState), record.OldState);
-            if (!String.IsNullOrEmpty(record.NewState)) msg.Property(nameof(LogRecord.NewState), record.NewState);
+            if (!String.IsNullOrEmpty(record.HostId)) logEvent.Properties.Add(nameof(LogRecord.HostId), record.HostId);
+            if (!String.IsNullOrEmpty(record.InstanceId)) logEvent.Properties.Add(nameof(LogRecord.InstanceId), record.InstanceId);
+            if (!String.IsNullOrEmpty(record.Area)) logEvent.Properties.Add(nameof(LogRecord.Area), record.Area);
+            if (!String.IsNullOrEmpty(record.Version)) logEvent.Properties.Add("nuviotVersion", record.Version);
+            if (!String.IsNullOrEmpty(record.OldState)) logEvent.Properties.Add(nameof(LogRecord.OldState), record.OldState);
+            if (!String.IsNullOrEmpty(record.NewState)) logEvent.Properties.Add(nameof(LogRecord.NewState), record.NewState);
             
 
             foreach (var prop in record.Parameters)
             {
-                msg.Property(prop.Key, prop.Value);
+                logEvent.Properties.Add(prop.Key, prop.Value);
             }
 
-            msg.Write();
-            //}
+            _logger.Log(logEvent);
             _consoleLogWriter.WriteEvent(record);
 
             return Task.CompletedTask;

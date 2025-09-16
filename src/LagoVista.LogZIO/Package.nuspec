@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>LagoVista.LogZIO</id>
+    <version>3.0.3044.1900</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.nuviot.com</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <description>Provides updated services to connect to LogZ.io, getting conflict with direct nuget packages so just include as source..</description>
+    <copyright>Copyright Software Logistics - 2025</copyright>
+    <tags>Logging</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 9/16/2025 11:00:44 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
+    <dependencies>
+      <group targetFramework="netstandard2.1">
+        <dependency id="OpenTelemetry" version="1.12.0" />
+        <dependency id="log4net" version="3.2.0" />
+        <dependency id="NLog" version="6.0.4" />
+        <dependency id="LagoVista.Core" version="3.0.3044.1900" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\netstandard2.1\LagoVista.LogZIO.dll" target="lib\netstandard2.1\LagoVista.LogZIO.dll" />
+    <file src="bin\release\netstandard2.1\LagoVista.LogZIO.pdb" target="lib\netstandard2.1\LagoVista.LogZIO.pdb" />
+  </files>
+</package>
