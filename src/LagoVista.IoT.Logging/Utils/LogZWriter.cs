@@ -57,13 +57,16 @@ namespace LagoVista.IoT.Logging.Utils
             if (!String.IsNullOrEmpty(record.HostId)) logEvent.Properties.Add(nameof(LogRecord.HostId), record.HostId);
             if (!String.IsNullOrEmpty(record.InstanceId)) logEvent.Properties.Add(nameof(LogRecord.InstanceId), record.InstanceId);
             if (!String.IsNullOrEmpty(record.Area)) logEvent.Properties.Add(nameof(LogRecord.Area), record.Area);
-            if (!String.IsNullOrEmpty(record.Version)) logEvent.Properties.Add("nuviotVersion", record.Version);
+            if (!String.IsNullOrEmpty(record.Version)) 
+                logEvent.Properties.Add("nuviotVersion", record.Version);
+            else
+                logEvent.Properties.Add("nuviotVersion", _version);
+
             if (!String.IsNullOrEmpty(record.OldState)) logEvent.Properties.Add(nameof(LogRecord.OldState), record.OldState);
             if (!String.IsNullOrEmpty(record.NewState)) logEvent.Properties.Add(nameof(LogRecord.NewState), record.NewState);
             if (!String.IsNullOrEmpty(record.StackTrace)) logEvent.Properties.Add("nuviotStackTrace", record.StackTrace);
 
             logEvent.Properties.Add("nuviotApp", _appName);
-            logEvent.Properties.Add("nuviotVersion", _version);
             logEvent.Properties.Add("nuviotEnvironment", _environment);
 
             foreach (var prop in record.Parameters)
@@ -126,14 +129,16 @@ namespace LagoVista.IoT.Logging.Utils
             }
 
             logEvent.Properties.Add("nuviotApp", _appName);
-            logEvent.Properties.Add("nuviotVersion", _version);
             logEvent.Properties.Add("nuviotEnvironment", _environment);
-
 
             if (!String.IsNullOrEmpty(record.HostId)) logEvent.Properties.Add(nameof(LogRecord.HostId), record.HostId);
             if (!String.IsNullOrEmpty(record.InstanceId)) logEvent.Properties.Add(nameof(LogRecord.InstanceId), record.InstanceId);
             if (!String.IsNullOrEmpty(record.Area)) logEvent.Properties.Add(nameof(LogRecord.Area), record.Area);
-            if (!String.IsNullOrEmpty(record.Version)) logEvent.Properties.Add("nuviotVersion", record.Version);
+            if (!String.IsNullOrEmpty(record.Version)) 
+                logEvent.Properties.Add("nuviotVersion", record.Version);
+            else
+                logEvent.Properties.Add("nuviotVersion", _version);
+
             if (!String.IsNullOrEmpty(record.OldState)) logEvent.Properties.Add(nameof(LogRecord.OldState), record.OldState);
             if (!String.IsNullOrEmpty(record.NewState)) logEvent.Properties.Add(nameof(LogRecord.NewState), record.NewState);
             
