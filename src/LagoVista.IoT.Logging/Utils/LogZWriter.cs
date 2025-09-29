@@ -27,7 +27,6 @@ namespace LagoVista.IoT.Logging.Utils
 
         public Task WriteError(LogRecord record)
         {
-
             var logEvent = new LogEventInfo()
             {
                 Level = LogLevel.Error,
@@ -69,6 +68,8 @@ namespace LagoVista.IoT.Logging.Utils
             logEvent.Properties.Add("nuviotApp", _appName);
             logEvent.Properties.Add("nuviotEnvironment", _environment);
 
+            logEvent.Properties.Add("NuvIoTLogLevel", record.LogLevel);
+
             foreach (var prop in record.Parameters)
                 logEvent.Properties.Add(prop.Key, prop.Value);
 
@@ -82,17 +83,13 @@ namespace LagoVista.IoT.Logging.Utils
 
         public Task WriteEvent(LogRecord record)
         {
-            //if (record.LogLevel?.ToLower() == "trace")
-            //{
-            //    _logger.Trace(record.Message);
-            //}
-            //else
-            //{
             var logEvent = new LogEventInfo()
             {
-                Level = LogLevel.Error,
-                Message = record.Message
+                Message = record.Message,
+                Level = LogLevel.Info
             };
+
+            logEvent.Properties.Add("NuvIoTLogLevel", record.LogLevel);
 
             if (!String.IsNullOrEmpty(record.Tag))
             {
