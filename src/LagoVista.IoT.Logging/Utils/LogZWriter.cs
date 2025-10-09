@@ -89,7 +89,7 @@ namespace LagoVista.IoT.Logging.Utils
                 Level = LogLevel.Info
             };
 
-            logEvent.Properties.Add("NuvIoTLogLevel", record.LogLevel);
+            logEvent.Properties.Add("nuviotLogLevel", record.LogLevel);
 
             if (!String.IsNullOrEmpty(record.Tag))
             {
