@@ -1,0 +1,714 @@
+{
+  "version": 1,
+  "createdAtUtc": "2025-10-18T23:07:49.3347659Z",
+  "updatedAtUtc": "2025-10-18T23:11:06.5356977Z",
+  "files": {
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/DebugLogger.cs": {
+      "pointIds": [
+        "004ef9dbb52b46808eb02a8186d9be5b",
+        "13a3482bee4b497bbfc7d6be1237f155",
+        "1630e0986efd453a815bd26691f69182",
+        "432de7f08a8547d8ba8fbb7fdc329a55",
+        "6df71857a5144339af723c5cb6789e90",
+        "811315133e644b2685b4f3ce6f4137c7",
+        "87bf83003d05445abf15189bb20ea609",
+        "8d41aa44e024458e85f6d1a422d52fa9",
+        "b70991b0f29a41459643c3221fed7a16",
+        "b7a48a7e651b4371b66f67833eefacca",
+        "cb1880890de84c76b907b3c09bd40409",
+        "cf9a29ee72b541958b43c94d3877adc0",
+        "d1d842d3492044948052e35d8e43122a",
+        "eb17d544e702420eb3125b52dc711274",
+        "f178b551fed049a6be5b28509388f174",
+        "f4f2b55bc2b3454faf6acbeab02b1b27",
+        "f601f60431cf489287c5f3abf9e2162b"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Error.cs": {
+      "pointIds": [
+        "17af483209cf44b98adf6eac850bd7b1",
+        "19209c23238d4a3f9d8e6097f40f28dc",
+        "20d5f4191d0645498b34a0f2d7c59590",
+        "2c116d80b13545e0ba1f4ab265fb1cce",
+        "55ea3101dc4a4f5da5c1073c9b1ba215",
+        "5e87c136c38349bb85ca97c2a4258223",
+        "73db659c90bb4f42974a9561a6900e11",
+        "8ab93d4cb2e9444cbab4e8d2c58dbcf1",
+        "a57372096de444ae80bbc918bd8b4e87",
+        "d2fca3dae31044c8924cf8cf1e54e868",
+        "d7d66a3a5af34e778afad10e647a7785",
+        "e619af4bdbaf4dc298f1a7ac57306614",
+        "e6cb3c383aec46308284c5ea34fd1462",
+        "f09f127fb780455f961c14f3f4236a44",
+        "faa9d8c173a14031ae27573a5971cc14"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/ErrorCode.cs": {
+      "pointIds": [
+        "04c5bc97934b4c7689c770b948c12064",
+        "085b2551eec44bb884cd2eebd6f2fd51",
+        "0eb6741abde6400f82177911f72a58b4",
+        "102c56f5c3644ca2835db79c70f3da3a",
+        "3b9505fb1b6b467e848ed0d729d3995e",
+        "641fa5d388f745848e347278d2e569e5",
+        "655d61c51a8e41fb88d5ae24d7a9a613",
+        "6ef2104335b743cfbe4815657d806e61",
+        "873f2e2467d64261be4e90a3a789b776",
+        "bffcdd5539fb4dd4b7af5a935bd4787b",
+        "eaac41187ee34967b1f44f8ff556b6bb",
+        "eeada968e98845b29629a493457946e5"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/ErrorCodes.cs": {
+      "pointIds": [
+        "3ce7dde4ba24487f846ac181f43e40f2",
+        "51ef9e6ff75a4659b2a27e30d7a0d3c5",
+        "5d9e8ddf804e4274ab4c130b606c1720",
+        "7b152b96d56446f2942b8718a89ebaaf",
+        "81b50d7f501e4c38b7dea1b63649cca2",
+        "cc4abf248a8c414ca7908a3831ebd44b",
+        "f91339f954dd4fe0acc0a808dca3459c"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Info.cs": {
+      "pointIds": [
+        "283fa4b45bfd4039a7139d9f76bcf0c1",
+        "38d5aa44716e442889ef35e3a6919f99",
+        "7961481627414e2cba091e91f69d3fe6",
+        "e023024c1b7e4b419b6f98719755925d"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/LoggingDomain.cs": {
+      "pointIds": [
+        "1bda235bc7ab4c41a81c5f243b2455d2",
+        "34b60725ae234666b7fa8c2e8422eae0",
+        "89d1e7ebe77d483282af93725ccc2f33",
+        "acba2a0ba1c147b69675aad192e38680",
+        "c93bc641cea6485b8ccb53ecb95d210b",
+        "fc7659af0aed47179edebf7d846593a2"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Startup.cs": {
+      "pointIds": [
+        "aeb6ba327f7042e2a79672db5e6bd491",
+        "d0241f9ae7fb4bb8a34b2814cccaaefc",
+        "da5f08cddde7417dbe156725b275e823",
+        "e11b165cc4444797b70ccf7795ed8ad7",
+        "e89572c291e545159d4904676b3e33e3",
+        "f9dd913a69b149888ec2277b36a1a67b"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/T4ResourceGenerator.cs": {
+      "pointIds": [
+        "0f4588b37cf044648eda1078b4a5b5c3",
+        "1728892961a941c59633e28378d2183f",
+        "2c510e62d31d4bff9d20c2f9d5a6356a",
+        "2fe47ded254a461b883eceb8b9bf4bfb",
+        "83da23ea295d43c78558b9450e4cf469",
+        "934f9d6aa6d8433bbf1f35b7aa7e52d7",
+        "9a39c887b8434dd0a5df5a6000aadd70",
+        "a07a8c5aae8c4b4c88dc7d4df765c1a8",
+        "ab694d8f084244f89da56095fda313f3",
+        "b8557f5d723746df90ca4eade7d5a1da",
+        "bc873480dafa4fcdba505faf99fb7cc6",
+        "be93b6d4652349f2ac383943656466fe",
+        "d5ab773393594116aef7caa6d82206f1",
+        "e507f5fa608947f28e9dd18857012814"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Warning.cs": {
+      "pointIds": [
+        "65184d18102940fcab27e8a8a8bbee9e",
+        "a77cfaf4aeb84549b1367c42a736baa5"
+      ]
+    },
+    "../../../../../../../lo.logging/Tests/LagoVista.IoT.Logging.Tests/UnitTest1.cs": {
+      "pointIds": [
+        "06c62fb0c9f84683a6898744c8c87cb2",
+        "0f0f246d8a414c99ae0d465252fd8fc1",
+        "187ea937b84e4f23a5aa9fdad8e89738",
+        "600aa4dd11954821bca3879bf29a5ffd",
+        "64fe54fcff90480dac4d6d82ae642070",
+        "86cb101d746a4f1a86fdee510f12d29a",
+        "8eecd78f7e6a4a3788c5b3fa7de35e62",
+        "b2df7ef936f4413497b891ed0958c83f",
+        "cf75a828c63741eba17c87e162b7363f",
+        "f2c2541a05a2400590bdc5158f602247"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Exceptions/InvalidConfigurationException.cs": {
+      "pointIds": [
+        "18a5d117daa94a51a18662f9b8f00383",
+        "18e95d86e338443aae1ecb617a2dc839",
+        "4240bfc3a13f4db0b0328310c2232688",
+        "44ee3e4bcb384b5b952925e78529e1bf",
+        "557ce168a4b24d0dab8d1b22387a9661",
+        "87adb29a604a484cb8ddd288c97a11f8",
+        "934bb2fc3e4a42a0b8af34cb359fb1e7",
+        "af8ddd47b65949e0ac9ef0072db330b4",
+        "c386e238237049df8ff452ecb60b7851",
+        "c5fe2881d636499ab9ff22f2e73a62dd",
+        "da784c949275427093258639c5bd58a0",
+        "fa64a1515ea54771a028951bd635f773"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Exceptions/InvalidOperationException.cs": {
+      "pointIds": [
+        "1607eb1c83fb4f5395f4f547376cd458",
+        "29a54ee602da43d88086c89f44c0528e",
+        "2e35772793db48e8991eb626094e1963",
+        "342919391eb84892aaed8aaeddc7eb38",
+        "51459ed2d02b4b7fb50e76a45998c9cb",
+        "595fdf9400cc457e8c77a3f4d42660d8",
+        "5a87941fb56949dab2dcebe92c628098",
+        "6be37fc26a174e3294d54a004972272e",
+        "b253076ff80849b29756e58d3afc6a89",
+        "ee4140ee8f4746a0baee75588b2d53d5",
+        "fe62e7748d7f4b35a340c79991184e34"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Extensions/ExceptionExtensions.cs": {
+      "pointIds": [
+        "0b813ad81fa34a168bef965d6bd759f4",
+        "0bf2d12920e2458d9202405aaeddee33",
+        "3394a69724194f75a204c01ec661dccf",
+        "d3bd3fd2d9fe4a019b10df9dca9a4701",
+        "ffa847bbed134b289dc2449517687542"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/AdminLogger.cs": {
+      "pointIds": [
+        "1cb1bdc8f71c40cabdbf06ab738895ef",
+        "371b1bed959c40c4adf81958338a5c10",
+        "4c9a3b60feb94863b0f977d697e83a7a",
+        "5142d31b29304310ab7f2ca080ec04cf",
+        "8871e1dfc4a047eca694d54c17a2fb66",
+        "90bbeb7a43c64f75a4ce3222eafd37d5",
+        "938f17bda3eb4059b1a2230234d60d5a",
+        "a6a8f1cfec9f47fb8a7044bd04f3fa27",
+        "b3083808b90c4c9998698d089120ddfa",
+        "e36ace69ba15416096cb2a062818341e",
+        "ff2e6d3786fa45808cddd60a78b8a097"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/DeviceLogger.cs": {
+      "pointIds": [
+        "03a13cd2052f412da2a46951693d18de",
+        "29c801c4536c45dc997096a5996a0cb8",
+        "3bf94fc7245544139ee99bd90dfa6e16",
+        "4856785ca24c43158dcaa8d5745a8370",
+        "4e2a7f76c15a4f1c994b6172aa43c133",
+        "4e8e2feba910410dbfa460774cf8e78f",
+        "51c372a5fcd5423798c9ed2f977cde95",
+        "5481c62bcea2433c8a207f81cb48cd78",
+        "5b986d7ee16041cc996e3635362e2c9b",
+        "77a0988ab54e4af9845a2d22de988093",
+        "7e402c52538742918ca8aff9e86b6b3f",
+        "7e918a8341434044ae644092b3b3e1cf",
+        "8055940e9c534a6bb1a1b1358325ddd3",
+        "88b903634b3b48f380d5c0f5b141efa7",
+        "90e16df6f6bc41b5b64b4b2fbf73c5bd",
+        "98842d534a1d4948a97b9525e85901c4",
+        "bc4f83fd79894405b35aa5d6720ca170",
+        "c607a90da96844ebb1aa0797c1c697f8",
+        "ca546610288e4e1995008dfed7807e25",
+        "e3b1d9053dca4a0eb838615934fa6b28"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/HostLogger.cs": {
+      "pointIds": [
+        "23dcf4c81e104a7ab223cb63374c0c39",
+        "2445b185cd30414ba5fc0a48264e24bc",
+        "712965794fe1483686deff7ad7a48647",
+        "9bd7090b7a9c47b182278c08f74e445f",
+        "9cf8f77ba94947f9b2d7f7168458b792",
+        "a1e3b94fbfd84509b17fe67f58e07fec",
+        "c49b1b47c23f444193819a8a814a23ca",
+        "c70e1dbee9124dce8b2a5d5ce1b9be1e",
+        "d5eb1c64c4a34532aeeea2663282b4dc",
+        "e09a4c0a4b12462586effc5aa0725654",
+        "e425904909584588a7d8b88013c9899f",
+        "ea0e6594e0854fc495837031ce3a34d1"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/IAdminLogger.cs": {
+      "pointIds": [
+        "0f76102546664447a8fd5ef91fac2dc9",
+        "12c69d9c57424608bb8c2c5656b09f95",
+        "15eed204517242a38421193d9da52780",
+        "1f07c68b1fa94d36b47dc549011cb7dc",
+        "8d5cbab601b34cf6a17d62e8c9ba43d1",
+        "9f0bbd9c85bc485fa7d2d0d0ec9c8ae4",
+        "b077fcd9f9ca41eb8881bd55c7fe76da",
+        "d08814047a284f9c9e3d1f2daa051046",
+        "ee2bab48c6e142f98cd89d940db63976",
+        "f8e29380231a483eae43c2196fab50e9"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/IAzureLogReader.cs": {
+      "pointIds": [
+        "0aa5c6901c2c448a977541806edbbe33",
+        "19ad4c47fa4f4531b38e527db380cdc4",
+        "1b0de9c8a7d94780a12acc876b43b89f",
+        "6f4bfccc80fb47c88c53bf3586c33b62",
+        "81294dc286a04e1eb47f394f8f1aa1f9",
+        "9065a7a162804b8694c95f299c0c45de",
+        "ca281e79c3e2475f99c0516b2976b4ea",
+        "e7834a07efe14507816be09e8a2b56ba"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/IDeviceLogger.cs": {
+      "pointIds": [
+        "0329113805fb473fa0837892ae7269c1",
+        "0ec5a47b8e84427db9c12b8003ca1de9",
+        "3c95c56aa61d4e0096f655bbc437dcda",
+        "66b58edce72c446dbc4e0437da27052a",
+        "6813f6d8f8bc4ff28d809c06ae308346",
+        "6c1d3cd0c39d49feb81c96607f49dbc8",
+        "9977190ba0fd467f906a15e417f8fbc5",
+        "c7e51ac7b8b646d296497e662cebee3e",
+        "d291832748834be9af376410e02f1717",
+        "d83e8ab79a8748ad9dc9e42e743d0d21",
+        "fcdc35c934bb4ea6ade68058ee78892a"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/IHostLogger.cs": {
+      "pointIds": [
+        "17d523b6776f4aa2ac82d01e120dfc7e",
+        "319af4cf001945eb93bf54c3c7157d83",
+        "350344ae65fc4b39a6d24645a1e75d0f",
+        "3a52e4f816b7424799486f9a54dcdc77",
+        "3cdc5486b02f47628f30c992ffc68e55",
+        "45731eee81bf4a6baf02c40e3cfd7291",
+        "48331a7f2abc45488f1e4b64c333ed82",
+        "5b577ae2a34d42eca3bf012c9a952331",
+        "7bdad1a03cb944e98a93b44aa33df4f1",
+        "87432f4fe5dd42e9a77021e9a1ccd373",
+        "937c02f0f9a74d17bfab008368948060",
+        "9899679253074958953b658a9b7ec483",
+        "b188468df47e4bc08f7b41f7890816a7",
+        "cc47461a97fe4303bd0a448077928c29",
+        "f291f83a22854efdbf22ac56e98d80f1"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/IInstanceLogger.cs": {
+      "pointIds": [
+        "05d3621b217446b7b7b2bc8b1bb7966c",
+        "314e323d559a4732bb698d4cf5547b38",
+        "3322f57330f6460cab6f209e577e5dea",
+        "3cc28cb498e44cbfbde414846c01db33",
+        "423171cc1ce345e2964fd97105b4b421",
+        "72280435d8f14d3ea6c7438ef23d3274",
+        "83442d0f54a049aa809fd9f414fc5911",
+        "a65eaee868324ed28eab095dd7f554d5",
+        "a8abffae9a93491cb67a256cd1d1fa15",
+        "c6854a51484742d5b5baa95b6d668e9d",
+        "c70d2e5e8c1247bab3ce522c1d5c34ca",
+        "daca0e7cd63b483bb71d1c9c81a2f519",
+        "e8c93c27bf164a5f83931eb30cd34db5",
+        "ebaf4cbb2ee34e499b0b89481bcf5ce5"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/IInstrumentationKeyProvider.cs": {
+      "pointIds": [
+        "0190a967481742208fc7a33a625598e7",
+        "0227c41fbf134aa0bd05f0b561a95069",
+        "231440b315334ecb851cde5afce0aadb",
+        "2d23503956b54378b1dabd0ef1bbd1b1",
+        "30f518f9ad6248b090fbe1f12b7c3f6e",
+        "5c8291f2939145e89e6f3a88748acbf5",
+        "6afc47650a134243aef78d897b871d3a",
+        "7924e9c1d9f84146a91ea8c85d3a7016",
+        "7c13a05db6b246eb924c14fc1256739b",
+        "93e7ed11529e44d8b9c61933b1e8793b",
+        "a7751a1ced584b6f8984584d51ca282a",
+        "c136ea3314324904b3029cff078f2ea3",
+        "ce146a89b5d146eea72daf1b57a476c1",
+        "dbfdfe778665423fb5d02eb5b54d5899",
+        "dcc2b6fff6d74622885f5e57f4fc4ddd",
+        "f6c967b6782b41e9ba688bb02adc218a"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/ILogReader.cs": {
+      "pointIds": [
+        "1b97f1ce548b473c955cfc1da171b8c7",
+        "6aa2fb87fbb245dbaa0036f1ecdfd9cd",
+        "7fb7b52d2f4f4d4794a784bd9ee444fd",
+        "a958bc09be744cd09b71296b15cd991e",
+        "b78c10acf76e433f80b4538c462bbd76",
+        "bd52c8e1d6c34cd6be48482c5178016b",
+        "d6482de139714b14ba55c4c6879ac454",
+        "f1fa84c180fb4c6d92eccb6d7f20567e"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/ILogWriter.cs": {
+      "pointIds": [
+        "14e8138d0dba48ca9323ae93761b728e",
+        "336b6915f5b0406ebd1da6f73357640d",
+        "a08ca1003eae4000a7f16a37d5a7b6cb",
+        "b682a11d1334403e98b93cfec0d6545c",
+        "d713e2855dc74c9bb66f84b724a68a3f",
+        "f011d57ad665413daf326842984429c1"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/InstanceLogger.cs": {
+      "pointIds": [
+        "01861655a3534fcb91dd86a60b8306be",
+        "0c9521ced1304004a52947c8a887ea8c",
+        "40001da9b07f41bead39c76058172943",
+        "540cd28093b346c6b8c6283b14b7d7f2",
+        "5d352141bb014ca0abdb5da4972b5d08",
+        "701ab4b0855e4708be7fa2ced60231ab",
+        "7ce8097f3ac14f36b0d93a8a324f2d4f",
+        "8363cf86c5b644a9bc5dca8c2cc0a34a",
+        "afe09e5ab14149d186c2d9006c05adac",
+        "b30a53fb779c450593a2279c27a14e11",
+        "dfac90d6e7d04fdf850c2e8f04f57db0",
+        "ee162918ef1e49e2bf7b19ed38bfd091"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Loggers/LoggerBase.cs": {
+      "pointIds": [
+        "00608eb02ee04c9aabc904f820e1f51e",
+        "06960c9d6a0b4c7db0cd1b82a82dcf67",
+        "0e6b41a824dc4b948ae1895de5c4dbd1",
+        "115c6597bc7e4a41b5113892d760a3c3",
+        "175a249247e641e98b9fd14e0e291597",
+        "18a268ffbcf5425fb61139c4c04dabc5",
+        "1a06e7a716ba49ada02318b6be470f9a",
+        "1b1946e7d3f94fccbe536df5bc2320ad",
+        "1bf3e8015bdf4bd7bd16f0e595e263e1",
+        "2394b598449a4db798bd52f80fa51c2c",
+        "28869c316b3f47d4825fd3dcaf4b4bbc",
+        "2d3b444a28e24a00aed40db51be7f8ed",
+        "3cc36cca732d416cb1324b59a755be20",
+        "3cd81ad7dd4c45949a04bb5ca0372e64",
+        "3d09435831ec4a7d9c5904b69fea0bb2",
+        "3d594353712a4589bf1f71628f4a40ba",
+        "4a6eee063735475398fd5ad7036050dd",
+        "4aecbfe136964e18973a3a4da07a205f",
+        "5b629d025b9b49459860eb9d809ccf24",
+        "5ef03c579a11436ba4736517c2fa0931",
+        "5f202a40ca29478e932a7eff5384ca09",
+        "7127b8dd9bfd4893be92e491e30a91ea",
+        "71c21c22111d4f1394607a9ad9ea37c0",
+        "733c096d63be482793a5593544ea6791",
+        "797c5c0245ff46488f3c6e293c6fae65",
+        "867a8bdec7e341a498363dcad72cad52",
+        "877a88e67363425d956eb5441ed7d2a5",
+        "8ddc275512874e4d870b08c13f5e5980",
+        "91b5e9f0e196452db5656c58340c9e22",
+        "9670923b29aa412181fdbdac839628ed",
+        "9b188847e87e4b19b06558ce5bb91c06",
+        "9b4b1ca2d27c4bd1bb1c361aa761956f",
+        "9c85fbea30dc44b6940f99046b1e7df2",
+        "b25693aeab454383a0de5b12fff65c90",
+        "c229de75facc4f99ac2f28a28d62eb20",
+        "c600d2a47192402d939526fcd2359bf6",
+        "c9b78af74c784c648b293c025f5adeb8",
+        "d3c149a87bc446a4ad2c9f5b6e4ce1c5",
+        "d5f94da4e1c14e9ca0897a6527f90b15",
+        "d670de27134241c1990aea0a76ed66bb",
+        "dc51e1af6ffe4ba88d4c65a382076683",
+        "e4277c0beecc43c09c1ec89c0471b91f",
+        "ff89f26e3fe54cc9bd9ee4063f23f9c0"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Models/LogRecord.cs": {
+      "pointIds": [
+        "040498a3577a4316834b3ba86b7a8f6e",
+        "050c5fd86bab48c98ebbe5a2fa7d4797",
+        "11a3b86e18bb449f89be0a8125e9112f",
+        "18029b4d57634bee9934471c0f9301a8",
+        "1949b4f80eb54e11890a9e8b157bf672",
+        "1b00739613c44dcd97f8440112d08779",
+        "1bbb319e17894d61875bb4cdd7a8436b",
+        "223640937128407aa083d833e967513d",
+        "227084e40ae24269a966dc9ce6f77373",
+        "2d2aa6468cdb49af8c5b3280018f37b8",
+        "4365edb7f2604ca7883d3454effda4cf",
+        "4dec8e5bbb6b4e37bfe3d02e37cb1dbd",
+        "6b0e8d6c5e6249efb821e552f0890b17",
+        "6be4101de0e4441d83e988e47cb879b3",
+        "71d629045a754c96a658e01db0eee503",
+        "7383eb2e234440c29201ee77570dfc68",
+        "7a61bd44e0e046ff970d5d6b2906fd12",
+        "7e71d305950d4173b88df7d4762ed4b4",
+        "7f5112ffafd84197af8bd27225be4b95",
+        "8109e96229414ec0b610fb01a5280908",
+        "83e03e581c0e4176956b73354c38a4e6",
+        "919b114644f643ac886daf3d2bed0540",
+        "9bb75e098d7c4e76a8b2673b7b108762",
+        "a1f627b6d1d94598b9dd4f9496f55a57",
+        "aae1675c3abf41938c1a71799f37e6b1",
+        "bfadf29e1fca4caab8dcf70ec4c7dda6",
+        "eb06b0aeb2e54ea9a745ddb7c81d578d",
+        "f7e16e122ad04d55a2f5991f5b6df7c9"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Utils/LogWriter.cs": {
+      "pointIds": [
+        "2d5bdc29472045b0820b12c8e0872a8e",
+        "3016d15260444d8dac17ffe142a30a43",
+        "3d589239709e4f91b0fecc3ac89f2b12",
+        "54525d27e0794d4398e4657fb6367c6b",
+        "5bb57dac8d034f2188877840e951aad3",
+        "633347bfaf2a41afbf1f84ac736af7ed",
+        "cd7f8812f1e644f084de2462436648ba"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Utils/LogZReader.cs": {
+      "pointIds": [
+        "15de32fd32934712bfabef8b79df58af",
+        "256868d6f84a46b6a634bf8d218f211f",
+        "3c8bd98de4d94ccebfbe5593fea20c19",
+        "5200d9a9559c4dd68d399ecbf4a58158",
+        "6185b067e61c4f61b4b234ed7fc91c65",
+        "8c5f2afd1bac467490849a05426eacfa",
+        "8f65e0ef44004119a82f23872f69a56f",
+        "9f604388916b427e9a2b84d06e42ef3f"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.IoT.Logging/Utils/LogZWriter.cs": {
+      "pointIds": [
+        "0451fc33e438436190826692e6f661c3",
+        "080a53adc99a451bae31663d63bd80f2",
+        "439e4d85d37c4bb7b75cc19e422a082c",
+        "49d651a19bbe4ebcb35882ff0394adba",
+        "52381791c4e044babeb5b1a7b48ee6e4",
+        "66a93ef15e5e430c86b198521243e7f5",
+        "6ce9f95ba7b3483787c53ccc1d2bf131",
+        "7c547f9d3efd4125a93d78403810e4bf",
+        "9e27afa2494d4a4daf2f78b85de41644",
+        "a2751b91615546759a2a69969a06292b",
+        "a72dd31fc9504dad9a6ba5418b79dd88",
+        "e21c3264b4394f0189e72c0bf35e1954",
+        "ffd8a2c74eda4776bd2031efbc525e11"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/HttpClient/GzipContent.cs": {
+      "pointIds": [
+        "34ad511d42ac4db9abeea247708a4a4c",
+        "6fe1c0f6df154d5d92a45e4f35c2f83e",
+        "8692868b26b04fc7ab615cdd664022d7",
+        "cd565b6f7e5d4cde911ad313d81fa458",
+        "ce79fdf11d584a44a31ff8e1938a8497",
+        "d90f1aef94de4bcaab3ac8fa94125513",
+        "dcee9422d42c41b7966154df5a62de80",
+        "e0cc870272304f4888598c2e08ae75f1",
+        "e803c6fbc0b04a0fa7b8df789de707c5"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/HttpClient/IHttpClient.cs": {
+      "pointIds": [
+        "131a340eeb91417b9a8a027214ee5bee",
+        "2653a664ada6471e860ceda799bb40d9",
+        "28958d0915d04ff887339c3375d5c829",
+        "38a8df58533541a997c145d63ecd70b3",
+        "4af77617269c4ae0a1bee066b8d237b9",
+        "583c405112ad411ea423c3a14e6c4634",
+        "600ae466f4f74c8d9bd8fab6fe1cef82",
+        "76e940acd9a04e43a0fa099e9f395ca4",
+        "7d3416d48d9b4673b620b8985cd63673",
+        "8a241c74a93e47f8ae21df69294ea190",
+        "8b31ea2e10694c48ab0b2c9581845b48",
+        "ae8f1a9ab45b4c66b095f39689f31527",
+        "c0ecd299973f43d3af0cc5e2e3239919",
+        "c2d6f6fbc65c43d9b9aef315bcb05aad",
+        "ca769dd0f4b14c39bd77f40f9ffe7101",
+        "d7a9df8bfdc84ef39ab0dfc1a8e1b853",
+        "e511439281a142adbc56b0768ed0ed1b"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/HttpClient/Proxy.cs": {
+      "pointIds": [
+        "04ee3103411142e998e6e661db58cc6b",
+        "21520c02af7b4330b7de426d932f5d5a",
+        "38a018ca4bae4b8092f00b579248f647",
+        "7177aedb94694ef89f6fedc0a3a14a82",
+        "7709727ed5964e9b8c1c1541b6fc00a6",
+        "7ac325ff2e1d493985cbbc6cfc383cae",
+        "c707ee96548e423b8e0cbcdd6c76635c",
+        "d70dfa8edcb943c085a526435d8fe7da"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/InternalLogger/InternalLogger.cs": {
+      "pointIds": [
+        "031912f0b95f4db9864c1fe56e82743c",
+        "080d60a0ed814444b603d3bcf73d146a",
+        "17bd66cb32244641a7a3c2ca42db7ced",
+        "1c6fa196981442c39c26d9df22331488",
+        "306227291cdf49d6b917ae2e5b055f28",
+        "3c789fa7720d4868a258ed2001dde579",
+        "4e15a8e9e89949c3999da8df5f8ec0ea",
+        "6983f9fa3ead46cf89562edbb3203440",
+        "956549a9809d48ec90ae676fbeda7915",
+        "a38903e8e7b043ca9a879d00822e7c5c",
+        "b40e89d8f1c6419cb21077fa9a4f0b60",
+        "d7b5345cfbd64561baf80a336d977bfa",
+        "d8773def05a44e99b9450bcaea55ddde",
+        "db0a5468eead41ff8d91b0d524a36b47",
+        "dc0c35e056874485b65f64711602dd8e",
+        "f07100a7ccd540c89652ce86539f8f97"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/Shipper/InternalLoggerNLog.cs": {
+      "pointIds": [
+        "30c9e8b6badf4397a7439f9c4a22a241",
+        "36978adf0a414d61835960446b2b614b",
+        "6f2d6e63a4aa46bba7c466ba8fb99a08",
+        "73aff9d876d94a459c05cb735072073f",
+        "744337a375e943f4ac6faa3c26148ff2",
+        "7efa8d78ed65403dafecdc23b4a554cb",
+        "866a135e82e04ceebb00f72026d361cf",
+        "bb74183e141141fa949bd731ef4e2e41"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/Shipper/LogzioTarget.cs": {
+      "pointIds": [
+        "02ef4720631048359ba17c799b397871",
+        "058a814a1d72487cbfc7d31904052af1",
+        "333c89a95e1648eaaed199433a930859",
+        "3fbc40b3f34d4549ac49da3ab775fe41",
+        "402c247357fc4010b9a745fbaf602730",
+        "466b0735cb954912a59bb30dd503cdd1",
+        "487058d19c2f409bb0577b1382999422",
+        "5294b4f3a5e04ee4b7a51ffb7b698b16",
+        "595b4f59d54c47e5b7a35c6aa1ae5b26",
+        "64c0435917bd4ffcb88f52a0271c36a2",
+        "6693e127a6a64a279f5c54bd0cf712b9",
+        "6b67c94c2f4d4bc594594dafbaec7604",
+        "6e5460c0e293468b9c45e15bcf20e7d6",
+        "7236d875a58f494ba3d9b68f69a36940",
+        "786170720a6b49bbb1c8622d9e644463",
+        "88743e1dd3b9452fa8c5619d618e6ea6",
+        "90e369d0e39641639de0bcf1fc1132e1",
+        "912115244113418ba10b13d8a0a00ec3",
+        "9ea559e67d1946449f25c50d29f4ee5b",
+        "aa547121fc944d77810d546868cb54ce",
+        "ad4621a88c034fcdb0b9c5fb559c9df3",
+        "aff9aee229294322b96bb4fa30f74662",
+        "bf57243b6ec340bab48836dd8642bd29",
+        "ca75362617f7413d84dab741f60968c8",
+        "cc1d6f78ce9f4f22a7daf15f8e4f1bf2",
+        "d5af65ef55194c0981776b41efb37e88",
+        "db7cceb6fb2d47d087fd0da008a03928",
+        "dd51e0632b4944e8a127daa6a3c3aa17",
+        "e16e8ef190004ce98383a26a168b7c42",
+        "e68fad0aeda24f9dafb84e3363d52cf3",
+        "e84193a6a5b947d294fcbe9602caf7bc",
+        "ea84ee36dacb4b2fa2c4d37505dc93f8",
+        "f05f0b0e7fd64d179ca04e96690adfe6",
+        "fc90be9511144ad98950adc381068c05"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/Shipping/BulkSender.cs": {
+      "pointIds": [
+        "01c5eaec6c15470fbf44dc5799ad1997",
+        "0ae079d1f3c54172807e06be758c0d4b",
+        "286f5669dfe34ad4bb3b8d29052b8b0e",
+        "2d3ccd939c154b09a3ba4eec4a7efbe3",
+        "33582596d9154350965e613a99d7a4dc",
+        "3f82d8c3175c46a6b94d02f216c967ed",
+        "444221c573e8464788e0ba116acb7bb3",
+        "4450765c4b4f4458a97a4dfca0fc7cb1",
+        "4ffea642dba34dcf8659d3936e0572d4",
+        "5ef2143e71df43c2a26100b13c5e7edc",
+        "b7ddbccc0763416d85bde1ed6d73fa3c",
+        "bbe4e050c9f546a5abc37137460b53f0",
+        "c65970bce7ac4b0c913a561573fed26e",
+        "cc52a02189b64b0ea055730dc37e616a",
+        "ce2611fc13a541069a3516288284110b",
+        "ecffb9e2817d469e975915a99e102e7c",
+        "efa65dcb0c494f8d9b4a1a9ef0a90900"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/Shipping/BulkSenderOptions.cs": {
+      "pointIds": [
+        "00317812ba444bd7be65d066350649ba",
+        "007f6097c827426eaf7f6e11001d171a",
+        "0759629eca75412082580f97295bb72f",
+        "0a725f6d43c3454f924c166471ba7686",
+        "2bed7b37c9ec41cabc72de81e7ed9142",
+        "5947b9baf6c4492cab4c51a7cf9e56e2",
+        "60e2f5e047f0479ea878466985ed13bd",
+        "6f49b38c222b4fa99fe8c3bde537bcca",
+        "7da3d9e4c7fb4c7b90419718ac842523",
+        "8ea9497b70274635a32f288a5c4876f2",
+        "91c2aec738e64dac94e976a5ac1067c4",
+        "9e410a55063e419a8e57b47185e10df9",
+        "a4ffaf6659474170ad9feb0a2368efd3",
+        "ba6ae29ae6fd4c7aa462eec62553b634",
+        "d415fb5278c44890b9fd7a6579979d4d",
+        "d4d928ea00de4d92a2c690b3fd318d8b"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/Shipping/JsonToStringConverter.cs": {
+      "pointIds": [
+        "0c004c7c2bed4981b165091d25b0dc66",
+        "a3f80bfe4d664587a3ff3662ef1a1e01",
+        "a9209958390d4ddbbd3b9ff634157dd6",
+        "abd83dff3d63489190c8ed6aeaedab06",
+        "ad85588ccdd54b4ca5c15e93a19afd6a",
+        "d579ed3f1def4cdcb643ed5072e8d051",
+        "d798ddaede134d3782b131cb33d1d42b",
+        "e9686deaf0f34869b4f7c615eb5fd364",
+        "ee91510191a6479fbdaaf9c0801d56f4",
+        "fa309604d643472e99a504e11a6f7bbf",
+        "ff27a96eead045639f042683d4113cb6"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/Shipping/LogzioLoggingEvent.cs": {
+      "pointIds": [
+        "0006e728d28f469787740995eb72d9fa",
+        "71e8c78b42aa450a90207037941cfe27",
+        "7e2e777c64f44fa5a1aac44900a20c29",
+        "baead41be7084d09a7c77ba2e575a122",
+        "e4ef7d6dc70e49b385bf32ff255b36b7"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/Shipping/Shipper.cs": {
+      "pointIds": [
+        "0dc8bbfa5ed047c3b6a4af814530d758",
+        "2267c9200546467a9094277a0b981ac8",
+        "2bb8d268c3c04381ad4f90a304df3b85",
+        "309da34c8ab84f9da81231097590723f",
+        "393922bf2ab34ebc8e653bb3964e34d2",
+        "3a276b9f49674091b974f21878841fd4",
+        "55602c2959c34836b682b3d83c71b60f",
+        "56daa9a663114a768f3bfddd1782c3d9",
+        "6706fcec7d11459c9c408f312ca393a0",
+        "728f80e3630d4aac8a841a0e6bc2b0c2",
+        "7f58cad866a34809a4c060601befed76",
+        "8b00557431084b97b72949f7978c7af8",
+        "92444df4080e4c8f9f9b0af86c565fcf",
+        "97ed4f20ec7f4a75a026a1ce677909e2",
+        "9a71ad8ccd9e4f6eb99e2cf392ce01fa",
+        "9d27fbf67c0f4abfa40c44a7db930977",
+        "a82d886500cb45a08360a6d8e13acca0",
+        "aec9e55df17141ad8488b604619d4f3b",
+        "c531bdde18674bacb667de5cb18ed343",
+        "cac9f23e52d54b46b591f7b5d50f8218",
+        "dfe3fb977a07463ca125dc370cce0604",
+        "e18a21c6696b46d19ac25a5cd11918b4",
+        "e85bf76d2333457b82af1714ef77a87b",
+        "ebb03ce117ce48ecb3a4dc86e0b51545",
+        "f51b24e46d5047bd86bbc8ac0ceaaed1",
+        "fd8d1b0c1aba42c99c7d3af5ffa32cf4"
+      ]
+    },
+    "../../../../../../../lo.logging/src/LagoVista.LogZIO/Shipping/ShipperOptions.cs": {
+      "pointIds": [
+        "3d2f57a1c49e4db79f8a2c1cbbbbdf3f",
+        "4c54055f59004745b897c4656199c3d5",
+        "57a0e239a1e3401cbfdba69c6e963d4b",
+        "5f4ccb1eaddf453ca42f45581e754739",
+        "6cba7c27b0fd4f4c9985cccabaa5ddfa",
+        "b2dd6a4755ff4b9e8d37705999acfe62",
+        "b878d760711d437f9cd461575393c398",
+        "e577c04b10fb4fea85fc6a3a62be240f",
+        "efa111281c0849f4a985deaac76b09e5"
+      ]
+    }
+  }
+}

@@ -1,4 +1,8 @@
-﻿using System;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 6ce453b6f5ddab3a8f3701065f7d86458ed379fbda08e5fef98f591d9beb9165
+// IndexVersion: 0
+// --- END CODE INDEX META ---
+using System;
 using System.Collections.Generic;
 using Logzio.DotNet.Core.InternalLogger;
 using Logzio.DotNet.Core.Shipping;
