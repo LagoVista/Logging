@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: 961a7e6b60f2f411b0df65afd363ae62d016aaea39c8043a0421ce6980200cde
-// IndexVersion: 0
+// IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.IoT.Logging.Models;
 using System;
