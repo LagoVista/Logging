@@ -10,12 +10,10 @@ using System.Text;
 
 namespace LagoVista.IoT.Logging
 {
-
     [DomainDescriptor]
     public class LoggingDomain
     {
         public const string Logging = "Logging";
-        
         [DomainDescription(Logging)]
         public static DomainDescription LoggingDescription
         {
@@ -23,7 +21,7 @@ namespace LagoVista.IoT.Logging
             {
                 return new DomainDescription()
                 {
-                    Description = "Log Data.",
+                    Description = "Log data and related records.",
                     DomainType = DomainDescription.DomainTypes.BusinessObject,
                     Name = "Logging",
                     CurrentVersion = new Core.Models.VersionInfo()
