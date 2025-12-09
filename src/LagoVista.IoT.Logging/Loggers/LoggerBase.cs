@@ -117,8 +117,6 @@ namespace LagoVista.IoT.Logging.Loggers
 
         public void AddException(string tag, Exception ex, params KeyValuePair<string, string>[] args)
         {
-            var msg = ex.Message;
-
             var logRecord = new LogRecord()
             {
                 LogLevel = "Exception",

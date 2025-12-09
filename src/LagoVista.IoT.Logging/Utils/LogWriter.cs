@@ -15,18 +15,30 @@ namespace LagoVista.IoT.Logging.Utils
         {
             Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.WriteLine($"[error] {DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
+            Console.WriteLine($"[ERROR] {record.Tag} - {DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
             if (!String.IsNullOrEmpty(record.Details))
                 Console.WriteLine(record.Details);
 
+            if (!String.IsNullOrEmpty(record.StackTrace))
+                Console.WriteLine(record.StackTrace);
+
             Console.ResetColor();
 
+            Console.Error.WriteLine($"[ERROR] {record.Tag} - {DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
+            if (!String.IsNullOrEmpty(record.Details))
+                Console.Error.WriteLine(record.Details);
+
+            if (!String.IsNullOrEmpty(record.Message))
+                Console.Error.WriteLine(record.Message);
+
+            if (!String.IsNullOrEmpty(record.StackTrace))
+                Console.Error.WriteLine(record.StackTrace);
             return Task.CompletedTask;
         }
 
         public Task WriteEvent(LogRecord record)
         {
-            Console.WriteLine($"[event] {DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
+            Console.WriteLine($"{DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
 
             if (!String.IsNullOrEmpty(record.Details))
                 Console.WriteLine($"\t{record.Details}");
