@@ -37,6 +37,8 @@ namespace Logzio.DotNet.Core.Shipping
 
         public void Ship(LogzioLoggingEvent logzioLoggingEvent, ShipperOptions options)
         {
+            options.Debug = false;
+
             _queue.Enqueue(logzioLoggingEvent);
             if (options.Debug)
                 _internalLogger.Log("Logz.io: Added log message. Queue size - [{0}]", _queue.Count);

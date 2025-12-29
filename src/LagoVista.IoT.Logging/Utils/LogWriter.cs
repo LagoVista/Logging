@@ -13,38 +13,45 @@ namespace LagoVista.IoT.Logging.Utils
     {
         public Task WriteError(LogRecord record)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
+            try
+            {
+                var tag = record.Tag.Replace("[", "[Error_");
+                Console.Error.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} {tag} - {record.Message?.TrimEnd('.')}");
+                if (!String.IsNullOrEmpty(record.Details))
+                    Console.Error.Write($"; DETAILS={record.Details.Trim()}");
 
-            Console.WriteLine($"[ERROR] {record.Tag} - {DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
-            if (!String.IsNullOrEmpty(record.Details))
-                Console.WriteLine(record.Details);
+                if (!String.IsNullOrEmpty(record.Message))
+                    Console.Error.Write($"; MESSAGE={record.Message.Trim()}");
 
-            if (!String.IsNullOrEmpty(record.StackTrace))
-                Console.WriteLine(record.StackTrace);
+                if (!String.IsNullOrEmpty(record.StackTrace))
+                    Console.Error.Write($"; STACK={record.StackTrace.Trim().Replace("\n", "\\n").Replace("\r", "\\r")}");
 
-            Console.ResetColor();
+                Console.Error.WriteLine(";");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("ERROR LOGGING FAILURE: " + ex.ToString());   
+            }
 
-            Console.Error.WriteLine($"[ERROR] {record.Tag} - {DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
-            if (!String.IsNullOrEmpty(record.Details))
-                Console.Error.WriteLine(record.Details);
-
-            if (!String.IsNullOrEmpty(record.Message))
-                Console.Error.WriteLine(record.Message);
-
-            if (!String.IsNullOrEmpty(record.StackTrace))
-                Console.Error.WriteLine(record.StackTrace);
             return Task.CompletedTask;
         }
 
         public Task WriteEvent(LogRecord record)
         {
-            Console.WriteLine($"{DateTime.Now.ToShortTimeString()} {record.Area} - {record.Message}");
+            if(!String.IsNullOrEmpty(record.Area))
+                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Area} - {record.Message.TrimEnd('.')}");
+            else if(!String.IsNullOrEmpty(record.Tag))
+                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Tag} - {record.Message.TrimEnd('.')}");
+            else
+                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Message.TrimEnd('.')}");
 
             if (!String.IsNullOrEmpty(record.Details))
-                Console.WriteLine($"\t{record.Details}");
+                Console.Write($"; DETAILS={record.Details}");
 
             foreach (var parameter in record.Parameters)
-                Console.WriteLine($"\t{parameter.Key}={parameter.Value}");
+                Console.Write($"; {parameter.Key}={parameter.Value}");
+
+            Console.WriteLine(";");
 
             return Task.CompletedTask;
         }

@@ -16,13 +16,19 @@ namespace LagoVista
 			var errorCode = new IoT.Logging.ErrorCode() { Code = code, Message = message };
 			var pairs = new KeyValuePair<string, string>[]
 			{
-				new KeyValuePair<string, string>("Message", ex.Message),
-				new KeyValuePair<string, string>("StackTrace", ex.StackTrace),
-				new KeyValuePair<string, string>("Source", ex.Source),
-				new KeyValuePair<string, string>("InnerException", ex.InnerException != null ? JsonConvert.SerializeObject(ex.InnerException) :  "[]")
+				new KeyValuePair<string, string>("message", ex.Message),
+				new KeyValuePair<string, string>("stackTrace", ex.StackTrace),
+				new KeyValuePair<string, string>("source", ex.Source),
 			};
 
-			return Tuple.Create(errorCode, pairs);
+			if(ex.InnerException != null)
+			{
+				new KeyValuePair<string, string>("innerException", ex.InnerException.Message);
+                new KeyValuePair<string, string>("innerExceptionStackTrace", ex.InnerException.StackTrace);
+                new KeyValuePair<string, string>("innerExceptionSource", ex.InnerException.Source);
+            }
+
+            return Tuple.Create(errorCode, pairs);
 		}
 	}
 }
