@@ -18,15 +18,19 @@ namespace LagoVista.IoT.Logging.Utils
                 var tag = record.Tag.Replace("[", "[Error_");
                 Console.Error.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} {tag} - {record.Message?.TrimEnd('.')}");
                 if (!String.IsNullOrEmpty(record.Details))
-                    Console.Error.Write($"; DETAILS={record.Details.Trim()}");
+                    Console.Error.Write($"; DETAILS={record.Details.Trim()};");
 
                 if (!String.IsNullOrEmpty(record.Message))
-                    Console.Error.Write($"; MESSAGE={record.Message.Trim()}");
+                    Console.Error.Write($"\\r\\n\\tMESSAGE={record.Message.Trim()};");
 
                 if (!String.IsNullOrEmpty(record.StackTrace))
-                    Console.Error.Write($"; STACK={record.StackTrace.Trim().Replace("\n", "\\n").Replace("\r", "\\r")}");
+                    Console.Error.Write($"\\r\\n\\tSTACK={record.StackTrace.Trim().Replace("\n", "\\n").Replace("\r", "\\r")}");
 
-                Console.Error.WriteLine(";");
+                int idx = 1;
+                foreach (var parameter in record.Parameters)
+                    Console.Error.Write($"\\r\\n\\t{idx++}. {parameter.Key}={parameter.Value};");
+
+                Console.WriteLine();
             }
             catch(Exception ex)
             {
@@ -43,15 +47,16 @@ namespace LagoVista.IoT.Logging.Utils
             else if(!String.IsNullOrEmpty(record.Tag))
                 Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Tag} - {record.Message.TrimEnd('.')}");
             else
-                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Message.TrimEnd('.')}");
+                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Message.TrimEnd('.')};");
 
             if (!String.IsNullOrEmpty(record.Details))
-                Console.Write($"; DETAILS={record.Details}");
+                Console.Write($"\\r\\n\\tDETAILS={record.Details};");
 
+            int idx = 1;
             foreach (var parameter in record.Parameters)
-                Console.Write($"; {parameter.Key}={parameter.Value}");
+                Console.Write($"\\r\\n\\t {idx++}. {parameter.Key}={parameter.Value};");
 
-            Console.WriteLine(";");
+            Console.WriteLine();
 
             return Task.CompletedTask;
         }
