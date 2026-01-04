@@ -54,7 +54,7 @@ namespace LagoVista.IoT.Logging.Utils
 
             int idx = 1;
             foreach (var parameter in record.Parameters)
-                Console.Write($"\\r\\n\\t {idx++}. {parameter.Key}={parameter.Value};");
+                Console.Write($"\\r\\n\\t{idx++}. {parameter.Key}={parameter.Value};");
 
             Console.WriteLine();
 
