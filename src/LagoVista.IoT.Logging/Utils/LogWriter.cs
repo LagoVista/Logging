@@ -30,7 +30,7 @@ namespace LagoVista.IoT.Logging.Utils
                 foreach (var parameter in record.Parameters)
                     Console.Error.Write($"\\r\\n\\t{idx++}. {parameter.Key}={parameter.Value};");
 
-                Console.WriteLine();
+                Console.Error.WriteLine();
             }
             catch(Exception ex)
             {
