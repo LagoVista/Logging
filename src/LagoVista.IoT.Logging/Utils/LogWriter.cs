@@ -16,8 +16,16 @@ namespace LagoVista.IoT.Logging.Utils
         {
             try
             {
-                var tag = record.Tag.Replace("[", "[Error_");
-                Console.Error.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} {tag} - {record.Message?.TrimEnd('.')}");
+                if (String.IsNullOrEmpty(record.Tag))
+                {
+                    Console.Error.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [Error] - {record.Message?.TrimEnd('.')}");
+                }
+                else
+                {
+                    var tag = record.Tag.Replace("[", "[Error_");
+                    Console.Error.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} {tag} - {record.Message?.TrimEnd('.')}");
+                }
+
                 if (!String.IsNullOrEmpty(record.Details))
                     Console.Error.Write($"; DETAILS={record.Details.Trim()};");
 
