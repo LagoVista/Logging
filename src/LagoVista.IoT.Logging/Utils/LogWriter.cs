@@ -5,6 +5,7 @@
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Logging.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Logging.Utils
@@ -47,10 +48,13 @@ namespace LagoVista.IoT.Logging.Utils
             else if(!String.IsNullOrEmpty(record.Tag))
                 Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Tag} - {record.Message.TrimEnd('.')}");
             else
-                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Message.TrimEnd('.')};");
+                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Message.TrimEnd('.')}");
 
             if (!String.IsNullOrEmpty(record.Details))
-                Console.Write($"\\r\\n\\tDETAILS={record.Details};");
+                Console.Write($"\\r\\n\\; tDETAILS={record.Details};");
+
+            if (record.Parameters.Any())
+                Console.Write(";");
 
             int idx = 1;
             foreach (var parameter in record.Parameters)
