@@ -16,6 +16,8 @@ namespace LagoVista.IoT.Logging.Utils
         {
             try
             {
+                Console.Error.Write("[Error]\\r\\n");
+                
                 if (String.IsNullOrEmpty(record.Tag))
                 {
                     Console.Error.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [Error] - {record.Message?.TrimEnd('.')}");
@@ -27,7 +29,7 @@ namespace LagoVista.IoT.Logging.Utils
                 }
 
                 if (!String.IsNullOrEmpty(record.Details))
-                    Console.Error.Write($"; DETAILS={record.Details.Trim()};");
+                    Console.Error.Write($";\\r\\n\\tDETAILS={record.Details};");
 
                 if (!String.IsNullOrEmpty(record.Message))
                     Console.Error.Write($"\\r\\n\\tMESSAGE={record.Message.Trim()};");
@@ -59,7 +61,7 @@ namespace LagoVista.IoT.Logging.Utils
                 Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Message.TrimEnd('.')}");
 
             if (!String.IsNullOrEmpty(record.Details))
-                Console.Write($"\\r\\n\\; tDETAILS={record.Details};");
+                Console.Write($";\\r\\n\\tDETAILS={record.Details};");
 
             if (record.Parameters.Any())
                 Console.Write(";");
