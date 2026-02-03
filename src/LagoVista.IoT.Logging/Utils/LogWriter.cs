@@ -53,22 +53,28 @@ namespace LagoVista.IoT.Logging.Utils
 
         public Task WriteEvent(LogRecord record)
         {
+            if(String.IsNullOrEmpty(record.Message))
+                 record.Message = "-no body-";
+
             if(!String.IsNullOrEmpty(record.Area))
                 Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Area} - {record.Message.TrimEnd('.')}");
             else if(!String.IsNullOrEmpty(record.Tag))
                 Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Tag} - {record.Message.TrimEnd('.')}");
             else
-                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Message.TrimEnd('.')}");
+                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Message?.TrimEnd('.')}");
 
             if (!String.IsNullOrEmpty(record.Details))
                 Console.Write($";\\r\\n\\tDETAILS={record.Details};");
 
-            if (record.Parameters.Any())
-                Console.Write(";");
+            if (record.Parameters != null)
+            {
+                if (record.Parameters.Any())
+                    Console.Write(";");
 
-            int idx = 1;
-            foreach (var parameter in record.Parameters)
-                Console.Write($"\\r\\n\\t{idx++}. {parameter.Key}={parameter.Value};");
+                int idx = 1;
+                foreach (var parameter in record.Parameters)
+                    Console.Write($"\\r\\n\\t{idx++}. {parameter.Key}={parameter.Value};");
+            }
 
             Console.WriteLine();
 
