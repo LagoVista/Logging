@@ -2,24 +2,24 @@
 <package>
   <metadata>
     <id>LagoVista.LogZIO</id>
-    <version>3.0.3097.0925</version>
+    <version>3.0.3212.1930</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Provides updated services to connect to LogZ.io, getting conflict with direct nuget packages so just include as source..</description>
-    <copyright>Copyright Software Logistics - 2025</copyright>
+    <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>Logging</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/8/2025 2:25:52 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/4/2026 12:30:10 AM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
         <dependency id="OpenTelemetry" version="1.12.0" />
         <dependency id="log4net" version="3.2.0" />
         <dependency id="NLog" version="6.0.4" />
-        <dependency id="LagoVista.Core" version="3.0.3097.0925" />
+        <dependency id="LagoVista.Core" version="3.0.3212.1930" />
       </group>
     </dependencies>
   </metadata>
