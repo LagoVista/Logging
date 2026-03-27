@@ -2,10 +2,10 @@
 // ContentHash: d3d8f92cd024bd70004185b71abd1e4495249eb9e1402aaef6f01cc8ddef0e56
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using LagoVista.Core.Interfaces;
 using LagoVista.IoT.Logging.Loggers;
 using Logzio.DotNet.NLog;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NLog.Config;
 using System;
@@ -14,10 +14,10 @@ namespace LagoVista.IoT.Logging
 {
     public class Startup
     {
-        public static ILogWriter CreateLogZWriter(IConfigurationRoot configurationRoot, string version, string app, string environment)
+        public static ILogWriter CreateLogZWriter(IConfiguration configuration, string version, string app, string environment)
         {
-            var section = configurationRoot.GetSection("LogzIO");
-            var token = "lDClQlWGOpREionETTlFfJsqswNbNysd";// section["Token"];
+            var section = configuration.GetRequiredSection("LogzIO");
+            var token = section.Require("AccessToken");
 
             var config = new LoggingConfiguration();
 
@@ -46,6 +46,19 @@ namespace LagoVista.IoT.Logging
         public static ILogReader CreateLogZReader(IConfigurationRoot configurationRoot)
         {
             return new Utils.LogZReader();
+        }
+
+    }
+}
+
+
+namespace LagoVista.DependencyInjection
+{
+    public static class LogoVistaLoggingModule
+    {
+        public static void AddLagoVistaLoggingModule(this IServiceCollection services, IConfigurationRoot configRoot, IAdminLogger logger)
+        {
+            LagoVista.IoT.Logging.Startup.CreateLogZWriter(configRoot, "1.0.0", "LagoVista.IoT.Logging", "Production");
         }
     }
 }
