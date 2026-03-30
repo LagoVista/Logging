@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.IoT.Logging.Loggers;
+using LagoVista.IoT.Logging.Utils;
 using Logzio.DotNet.NLog;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,7 @@ namespace LagoVista.IoT.Logging
     {
         public static ILogWriter CreateLogZWriter(IConfiguration configuration, string version, string app, string environment)
         {
-            var section = configuration.GetRequiredSection("LogzIO");
+            var section = configuration.GetSection("LogzIO");
             var token = section.Require("AccessToken");
 
             var config = new LoggingConfiguration();
@@ -58,6 +59,7 @@ namespace LagoVista.DependencyInjection
     {
         public static void AddLagoVistaLoggingModule(this IServiceCollection services, IConfigurationRoot configRoot, IAdminLogger logger)
         {
+            services.AddScoped<IAzureLogReader, AzureLogReader>();
             LagoVista.IoT.Logging.Startup.CreateLogZWriter(configRoot, "1.0.0", "LagoVista.IoT.Logging", "Production");
         }
     }
