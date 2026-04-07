@@ -125,6 +125,11 @@ namespace LagoVista.IoT.Logging.Loggers
                 StackTrace = ex.StackTrace,
             };
 
+            if(ex.InnerException != null)
+            {
+                logRecord.Message = $"{ex.Message}\r\nInner Exception: {ex.InnerException.Message}";
+            }
+
             logRecord.AddKVPs(args);
             InsertError(logRecord);
         }
