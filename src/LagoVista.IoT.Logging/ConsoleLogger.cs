@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Logging
 {
@@ -73,6 +74,12 @@ namespace LagoVista.IoT.Logging
         public void LogInvokeResult<TResultType>(string tag, InvokeResult<TResultType> result, params KeyValuePair<string, string>[] args)
         {
             LogInvokeResult(tag, result.ToInvokeResult(), args);
+        }
+
+        public Task NotifySystemAdminAsync(string tag, string subject, string message, params KeyValuePair<string, string>[] args)
+        {
+           Console.WriteLine($"{tag} - Notify System Admin: {subject} - {message} - {JsonConvert.SerializeObject(args)}");
+            return Task.CompletedTask;
         }
 
         protected override void SetRecordIdentifiers(LogRecord log)

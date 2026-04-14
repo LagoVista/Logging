@@ -7,6 +7,7 @@ using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Logging.Loggers
 {
@@ -25,5 +26,15 @@ namespace LagoVista.IoT.Logging.Loggers
 
         void LogInvokeResult(string tag, InvokeResult result, params KeyValuePair<string, string>[] args);
         void LogInvokeResult<TResultType>(string tag, InvokeResult<TResultType> result, params KeyValuePair<string, string>[] args);
+
+        /// <summary>
+        /// Use with care!
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="subject"></param>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        Task NotifySystemAdminAsync(string tag, string subject, string message, params KeyValuePair<string, string>[] args);
     }
 }

@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using LagoVista.Core.Interfaces;
+using System.Threading.Tasks;
 
 namespace LagoVista.IoT.Logging.Loggers
 {
@@ -78,6 +79,11 @@ namespace LagoVista.IoT.Logging.Loggers
         public void LogInvokeResult<TResultType>(string tag, InvokeResult<TResultType> result, params KeyValuePair<string, string>[] args)
         {
             LogInvokeResult(tag, result.ToInvokeResult(), args);
+        }
+
+        public Task NotifySystemAdminAsync(string tag, string subject, string message, params KeyValuePair<string, string>[] args)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void SetRecordIdentifiers(LogRecord log)
