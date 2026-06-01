@@ -26,6 +26,8 @@ namespace LagoVista.IoT.Logging.Models
             TimeStamp = DateTime.UtcNow;
         }
 
+        public bool EscapeCRLF { get; set; } = true;
+
         public NormalizedId32 Id { get; set; }
         public string LogLevel { get; set; }
         public string HostId { get; set; }

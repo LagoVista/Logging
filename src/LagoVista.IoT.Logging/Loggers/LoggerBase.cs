@@ -7,6 +7,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.IoT.Logging.Models;
 using Newtonsoft.Json;
+using NLog.LayoutRenderers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -283,6 +284,52 @@ namespace LagoVista.IoT.Logging.Loggers
         public void TrackMetric(string kind, string name, MetricType metricType, int count, params KeyValuePair<string, string>[] args)
         {
 
+        }
+
+        public void WriteJson<T>(string name, T data)
+        {
+            var json = JsonConvert.SerializeObject(data, Formatting.None);
+            var message = $"[JSON.{name}]={json}";
+
+            try
+            {
+                var logRecord = new LogRecord()
+                {
+                    EscapeCRLF = false,
+                    LogLevel = "JSON",
+                    Message = message,
+                };
+
+                InsertEvent(logRecord);
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR IN TRACE: {ex.Message} - original {message}");
+            }
+        }
+
+        public void WriteJson(string name, string json)
+        {
+            try
+            {
+                var logRecord = new LogRecord()
+                {
+                    EscapeCRLF = false,
+                    LogLevel = "JSON",
+                    Message = json,
+                };
+
+
+                InsertEvent(logRecord);
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR IN TRACE: {ex.Message} - original {json}");
+            }
         }
     }
 }

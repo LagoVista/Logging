@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.PlatformSupport;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -93,6 +94,19 @@ namespace LagoVista.IoT.Logging
         public void Trace(string message, params KeyValuePair<string, string>[] args)
         {
             Debug.WriteLine($"[TRACE] - {message}");
+        }
+
+        public void WriteJson<T>(string name, T data)
+        {
+            var json = JsonConvert.SerializeObject(data, Formatting.None);
+            var message = $"[JSON.{name}]={json}";
+            Console.WriteLine(message );
+        }
+
+        public void WriteJson(string name, string json)
+        {
+            var message = $"[JSON.{name}]={json}";
+            Console.WriteLine(message);
         }
     }
 }
