@@ -82,7 +82,7 @@ namespace LagoVista.IoT.Logging.Utils
             }
             else
             {
-                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] - {record.Area} - {record.Message.TrimEnd('.')}");
+                Console.Write($"{DateTime.Now.ToString("HH:mm.ss.fff")} [{record.LogLevel}] {record.Message}");
                 Console.WriteLine();
             }
 

@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using NLog.LayoutRenderers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -286,28 +287,100 @@ namespace LagoVista.IoT.Logging.Loggers
 
         }
 
+        private static void ProbeStringProperties(object value, string path = "$", int depth = 0)
+        {
+            if (value == null || depth > 8)
+                return;
+
+            if (value is string text)
+            {
+                if (text.Contains("what modes are available"))
+                {
+                    Console.WriteLine($"[TESTMESSAGE] FOUND STRING at {path}");
+                    Console.WriteLine(text);
+                    Console.WriteLine(JsonConvert.SerializeObject(text, Formatting.None));
+                }
+
+                return;
+            }
+
+            if (value is System.Collections.IEnumerable enumerable && !(value is string))
+            {
+                var index = 0;
+
+                foreach (var item in enumerable)
+                {
+                    ProbeStringProperties(item, $"{path}[{index++}]", depth + 1);
+                }
+
+                return;
+            }
+
+            var type = value.GetType();
+
+            if (type.IsPrimitive || type.IsEnum || type == typeof(decimal) || type == typeof(DateTime) || type == typeof(Guid))
+                return;
+
+            foreach (var property in type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            {
+                if (!property.CanRead)
+                    continue;
+
+                object propertyValue;
+
+                try
+                {
+                    propertyValue = property.GetValue(value);
+                }
+                catch
+                {
+                    continue;
+                }
+
+                ProbeStringProperties(propertyValue, $"{path}.{property.Name}", depth + 1);
+            }
+        }
+
+        private static string NormalizeTypographyInSerializedJsonForDiagnostics(string value)
+        {
+            if (String.IsNullOrEmpty(value))
+                return value;
+
+            return value
+                .Replace("\u201C", "\\\"")
+                .Replace("\u201D", "\\\"")
+                .Replace("\u2018", "'")
+                .Replace("\u2019", "'")
+                .Replace("\u2013", "-")
+                .Replace("\u2014", "-");
+        }
+
         public void WriteJson<T>(string name, T data)
         {
-            var json = JsonConvert.SerializeObject(data, Formatting.None);
+            var probeId = Guid.NewGuid().ToString("N").Substring(0, 8);;
+
+            ProbeStringProperties(data, $"[TESTMESSAGE:{probeId}]");
+            var settings = new JsonSerializerSettings
+            {
+                StringEscapeHandling = StringEscapeHandling.Default
+            };
+            var json = JsonConvert.SerializeObject(data, Formatting.None, settings);
+
+            // if anyone ever cracks this open again, somehwere in the console "smart-quotes" were getting converted to starndard quotes
+            // and messing up the JSON strcuture. We found them by B64 encoding, hopefully no one will ever run into that again
+            var bytes = Encoding.UTF8.GetBytes(json);
+            var base64 = Convert.ToBase64String(bytes);
+          
+            json = NormalizeTypographyInSerializedJsonForDiagnostics(json);
+
             var message = $"[JSON.{name}]={json}";
 
-            try
+            InsertEvent(new LogRecord()
             {
-                var logRecord = new LogRecord()
-                {
-                    EscapeCRLF = false,
-                    LogLevel = "JSON",
-                    Message = message,
-                };
-
-                InsertEvent(logRecord);
-
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ERROR IN TRACE: {ex.Message} - original {message}");
-            }
+                EscapeCRLF = false,
+                LogLevel = "JSON",
+                Message = message,
+            });
         }
 
         public void WriteJson(string name, string json)
@@ -317,7 +390,7 @@ namespace LagoVista.IoT.Logging.Loggers
                 var logRecord = new LogRecord()
                 {
                     EscapeCRLF = false,
-                    LogLevel = "JSON",
+                    LogLevel = "JSONS",
                     Message = json,
                 };
 
