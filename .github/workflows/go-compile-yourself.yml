@@ -113,7 +113,7 @@ jobs:
             $safeName = ($package.id -replace '[^A-Za-z0-9_.-]', '_')
             $smoke = Join-Path $smokeRoot $safeName
 
-            dotnet new classlib --framework net9.0 --output $smoke --force | Out-Null
+            dotnet new classlib --name SmokeConsumer --framework net9.0 --output $smoke --force | Out-Null
             if ($LASTEXITCODE -ne 0) {
               throw "Failed to create restore project for $($package.id)."
             }
