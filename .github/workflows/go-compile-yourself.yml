@@ -103,12 +103,15 @@ jobs:
           dotnet nuget locals all --clear
 
           $catalog = Get-Content artifacts/package-catalog.json -Raw | ConvertFrom-Json
+          $smokeRoot = Join-Path $env:GITHUB_WORKSPACE 'artifacts/restore-smoke'
+          if (Test-Path $smokeRoot) {
+            Remove-Item -Recurse -Force $smokeRoot
+          }
+          New-Item -ItemType Directory -Force -Path $smokeRoot | Out-Null
+
           foreach ($package in $catalog.packages) {
             $safeName = ($package.id -replace '[^A-Za-z0-9_.-]', '_')
-            $smoke = Join-Path $env:RUNNER_TEMP "restore-$safeName"
-            if (Test-Path $smoke) {
-              Remove-Item -Recurse -Force $smoke
-            }
+            $smoke = Join-Path $smokeRoot $safeName
 
             dotnet new classlib --framework net9.0 --output $smoke --force | Out-Null
             if ($LASTEXITCODE -ne 0) {
