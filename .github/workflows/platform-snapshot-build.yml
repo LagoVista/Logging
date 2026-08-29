@@ -1,0 +1,51 @@
+name: Platform Snapshot Build
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    env:
+      NUGET_GITHUB_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Configure shared package credentials
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_TOKEN)) {
+            throw 'NUGET_GITHUB_TOKEN is required to restore NuvIoT packages.'
+          }
+
+          dotnet nuget update source nuviot `
+            --username "${{ github.actor }}" `
+            --password "$env:NUGET_GITHUB_TOKEN" `
+            --store-password-in-clear-text `
+            --configfile NuGet.config
+
+          if ($LASTEXITCODE -ne 0) {
+            throw 'Unable to configure credentials for the shared NuvIoT package source.'
+          }
+
+      - name: Build committed dependency snapshot
+        shell: pwsh
+        run: dotnet build Logging.sln --configuration Release
