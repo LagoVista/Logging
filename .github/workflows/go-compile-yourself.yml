@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'feature/**'
+      - master
   pull_request:
     branches:
       - master
@@ -29,7 +30,7 @@ jobs:
     timeout-minutes: 30
 
     env:
-      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || format('5.0.0-feature.{0}', github.run_number) }}
+      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref == 'refs/heads/master' && '5.0.0' || format('5.0.0-feature.{0}', github.run_number) }}
       NUGET_GITHUB_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
 
     steps:
@@ -75,7 +76,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish packages
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && startsWith(github.event.head_commit.message, 'Publish Logging 5.0.0')) }}
         shell: pwsh
         run: |
           $packages = @(Get-ChildItem artifacts/packages -Filter '*.nupkg' -File | Where-Object { $_.Name -notlike '*.symbols.nupkg' } | Sort-Object Name)
@@ -96,7 +97,7 @@ jobs:
           }
 
       - name: Verify published package restores
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && startsWith(github.event.head_commit.message, 'Publish Logging 5.0.0')) }}
         shell: pwsh
         run: |
           dotnet nuget locals all --clear
