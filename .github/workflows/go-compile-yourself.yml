@@ -13,7 +13,7 @@ on:
         description: Package version to build
         required: true
         type: string
-        default: 5.0.0
+        default: 5.0.1
       publish:
         description: Publish repository packages to the shared GitHub Packages feed
         required: true
@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 30
 
     env:
-      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || format('5.0.0-feature.{0}', github.run_number) }}
+      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || format('5.0.1-feature.{0}', github.run_number) }}
       NUGET_GITHUB_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
 
     steps:
