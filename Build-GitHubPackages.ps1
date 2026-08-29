@@ -39,151 +39,135 @@ foreach ($node in @($props.SelectNodes('//PackageVersion'))) {
     }
 }
 
-$packageDefinitions = @(
-    [pscustomobject]@{
-        Id = 'LagoVista.IoT.Logging'
-        Project = 'src/LagoVista.IoT.Logging/LagoVista.IoT.Logging.csproj'
-        Nuspec = 'src/LagoVista.IoT.Logging/Package.nuspec'
-    },
-    [pscustomobject]@{
-        Id = 'LagoVista.LogZIO'
-        Project = 'src/LagoVista.LogZIO/LagoVista.LogZIO.csproj'
-        Nuspec = 'src/LagoVista.LogZIO/Package.nuspec'
-    }
-)
+$nuspecFiles = @(Get-ChildItem -Path (Join-Path $repoRoot 'src') -Filter 'Package.nuspec' -File -Recurse | Sort-Object FullName)
+if ($nuspecFiles.Count -eq 0) {
+    throw 'No Package.nuspec files were found beneath src.'
+}
 
-$internalDependencies = @{}
-$internalPackagePrefix = 'LagoVista.'
-
-foreach ($package in $packageDefinitions) {
-    $projectPath = Join-Path $repoRoot $package.Project
-    $nuspecPath = Join-Path $repoRoot $package.Nuspec
-
-    if (-not (Test-Path $projectPath)) { throw "Project not found: $projectPath" }
-    if (-not (Test-Path $nuspecPath)) { throw "NuSpec not found: $nuspecPath" }
-
-    [xml]$projectXml = Get-Content $projectPath -Raw
-    [xml]$nuspecXml = Get-Content $nuspecPath -Raw
-
-    $nuspecId = [string]$nuspecXml.package.metadata.id
-    if ($nuspecId -ne $package.Id) {
-        throw "NuSpec id '$nuspecId' does not match expected package id '$($package.Id)'."
+$packages = @()
+$packageIds = @{}
+foreach ($nuspec in $nuspecFiles) {
+    [xml]$xml = Get-Content $nuspec.FullName -Raw
+    $metadata = $xml.package.metadata
+    if ($null -eq $metadata -or [string]::IsNullOrWhiteSpace([string]$metadata.id)) {
+        throw "NuSpec '$($nuspec.FullName)' does not contain a package id."
     }
 
-    $directInternalDependencies = @()
-    foreach ($reference in @($projectXml.SelectNodes('//PackageReference'))) {
-        $id = [string]$reference.Include
-        if ($id.StartsWith($internalPackagePrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
-            $resolvedVersion = [string]$reference.Version
-            if ([string]::IsNullOrWhiteSpace($resolvedVersion)) {
-                if (-not $centralVersions.ContainsKey($id)) {
-                    throw "Internal package '$id' in '$($package.Project)' does not have a centrally managed version."
-                }
-                $resolvedVersion = $centralVersions[$id]
-            }
-
-            $directInternalDependencies += [pscustomobject]@{
-                id = $id
-                version = $resolvedVersion
-                source = 'PackageReference'
-            }
-        }
+    $packageId = [string]$metadata.id
+    if ($packageIds.ContainsKey($packageId)) {
+        throw "Duplicate package id '$packageId'."
     }
 
-    foreach ($reference in @($projectXml.SelectNodes('//ProjectReference'))) {
-        $include = [string]$reference.Include
-        $referencedPath = [System.IO.Path]::GetFullPath((Join-Path (Split-Path $projectPath -Parent) $include))
-        $referencedDefinition = $packageDefinitions | Where-Object {
-            [System.IO.Path]::GetFullPath((Join-Path $repoRoot $_.Project)) -eq $referencedPath
-        } | Select-Object -First 1
-
-        if ($null -ne $referencedDefinition) {
-            $directInternalDependencies += [pscustomobject]@{
-                id = $referencedDefinition.Id
-                version = $Version
-                source = 'ProjectReference'
-            }
-        }
+    $packageIds[$packageId] = $nuspec.FullName
+    $packages += [pscustomobject]@{
+        Id = $packageId
+        NuSpecPath = $nuspec.FullName
+        Xml = $xml
     }
+}
 
-    $internalDependencies[$package.Id] = @($directInternalDependencies | Sort-Object id -Unique)
+Write-Host "Discovered $($packages.Count) Logging packages:"
+$packages | Sort-Object Id | ForEach-Object { Write-Host "  $($_.Id)" }
 
-    $nuspecInternalVersions = @{}
-    foreach ($dependency in @($nuspecXml.SelectNodes('//dependency'))) {
+$xmlSettings = New-Object System.Xml.XmlWriterSettings
+$xmlSettings.Indent = $true
+$xmlSettings.Encoding = New-Object System.Text.UTF8Encoding($false)
+$xmlSettings.NewLineChars = "`r`n"
+$xmlSettings.NewLineHandling = [System.Xml.NewLineHandling]::Replace
+
+foreach ($package in $packages) {
+    $metadata = $package.Xml.package.metadata
+    $metadata.version = $Version
+
+    foreach ($dependency in @($package.Xml.SelectNodes('//dependency'))) {
         $dependencyId = [string]$dependency.id
-        if ($dependencyId.StartsWith($internalPackagePrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
-            $nuspecInternalVersions[$dependencyId] = [string]$dependency.version
+        if ([string]::IsNullOrWhiteSpace($dependencyId)) {
+            continue
+        }
+
+        if ($packageIds.ContainsKey($dependencyId)) {
+            $dependency.version = $Version
+        }
+        elseif ($centralVersions.ContainsKey($dependencyId)) {
+            $dependency.version = [string]$centralVersions[$dependencyId]
+        }
+        elseif ($dependencyId.StartsWith('LagoVista.', [System.StringComparison]::OrdinalIgnoreCase) -or
+                $dependencyId.StartsWith('NuvIoT.', [System.StringComparison]::OrdinalIgnoreCase)) {
+            throw "Internal dependency '$dependencyId' is not present in Directory.Packages.props."
         }
     }
 
-    foreach ($dependency in $internalDependencies[$package.Id]) {
-        if (-not $nuspecInternalVersions.ContainsKey($dependency.id)) {
-            throw "NuSpec '$($package.Nuspec)' is missing internal dependency '$($dependency.id)'."
-        }
-    }
-
-    foreach ($dependencyId in $nuspecInternalVersions.Keys) {
-        $expected = $internalDependencies[$package.Id] | Where-Object id -eq $dependencyId | Select-Object -First 1
-        if ($null -eq $expected) {
-            throw "NuSpec '$($package.Nuspec)' declares internal dependency '$dependencyId' that is not present in the project dependency graph."
-        }
-    }
-
-    $nuspecXml.package.metadata.version = $Version
-    foreach ($dependency in @($nuspecXml.SelectNodes('//dependency'))) {
-        $dependencyId = [string]$dependency.id
-        $expected = $internalDependencies[$package.Id] | Where-Object id -eq $dependencyId | Select-Object -First 1
-        if ($null -ne $expected) {
-            $dependency.version = $expected.version
-        }
-    }
-
-    $settings = New-Object System.Xml.XmlWriterSettings
-    $settings.Indent = $true
-    $settings.Encoding = New-Object System.Text.UTF8Encoding($false)
-    $writer = [System.Xml.XmlWriter]::Create($nuspecPath, $settings)
+    $writer = [System.Xml.XmlWriter]::Create($package.NuSpecPath, $xmlSettings)
     try {
-        $nuspecXml.Save($writer)
+        $package.Xml.Save($writer)
     }
     finally {
         $writer.Dispose()
     }
 }
 
-Write-Host 'Restoring Logging solution'
-dotnet restore $solutionPath --configfile NuGet.config
-if ($LASTEXITCODE -ne 0) { throw 'dotnet restore failed.' }
+Write-Host "Restoring Logging.sln for package set $Version..."
+dotnet restore $solutionPath
+if ($LASTEXITCODE -ne 0) { throw "dotnet restore failed with exit code $LASTEXITCODE." }
 
-Write-Host 'Building Logging solution'
-dotnet build $solutionPath -c Release --no-restore
-if ($LASTEXITCODE -ne 0) { throw 'dotnet build failed.' }
+Write-Host 'Building Logging.sln...'
+dotnet build $solutionPath --configuration Release --no-restore
+if ($LASTEXITCODE -ne 0) { throw "dotnet build failed with exit code $LASTEXITCODE." }
 
-foreach ($package in $packageDefinitions) {
-    $nuspecPath = Join-Path $repoRoot $package.Nuspec
-    Write-Host "Packing $($package.Id) $Version"
-    nuget pack $nuspecPath -OutputDirectory $outputPath -Version $Version -Properties Configuration=Release
-    if ($LASTEXITCODE -ne 0) { throw "nuget pack failed for '$($package.Id)'." }
+$catalogPackages = @()
+foreach ($package in ($packages | Sort-Object Id)) {
+    Write-Host "Packing $($package.Id) $Version..."
+    nuget pack $package.NuSpecPath -Version $Version -OutputDirectory $outputPath -NonInteractive
+    if ($LASTEXITCODE -ne 0) {
+        throw "nuget pack failed for '$($package.Id)' with exit code $LASTEXITCODE."
+    }
 
-    $expectedPackage = Join-Path $outputPath "$($package.Id).$Version.nupkg"
-    if (-not (Test-Path $expectedPackage)) {
-        throw "Expected package was not created: $expectedPackage"
+    $packageFile = "$($package.Id).$Version.nupkg"
+    $packagePath = Join-Path $outputPath $packageFile
+    if (-not (Test-Path $packagePath)) {
+        throw "Expected package was not produced: $packagePath"
+    }
+
+    $frameworks = @(
+        $package.Xml.SelectNodes('//dependencies/group') |
+            ForEach-Object { [string]$_.targetFramework } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Sort-Object -Unique
+    )
+
+    $dependencies = @()
+    foreach ($dependency in @($package.Xml.SelectNodes('//dependency'))) {
+        $dependencyId = [string]$dependency.id
+        $kind = if ($packageIds.ContainsKey($dependencyId)) {
+            'repository'
+        }
+        elseif ($dependencyId.StartsWith('LagoVista.', [System.StringComparison]::OrdinalIgnoreCase) -or
+                $dependencyId.StartsWith('NuvIoT.', [System.StringComparison]::OrdinalIgnoreCase)) {
+            'platform'
+        }
+        else {
+            'external'
+        }
+
+        $dependencies += [ordered]@{
+            id = $dependencyId
+            version = [string]$dependency.version
+            kind = $kind
+        }
+    }
+
+    $catalogPackages += [ordered]@{
+        id = $package.Id
+        version = $Version
+        file = $packageFile
+        targetFrameworks = $frameworks
+        dependencies = $dependencies
     }
 }
 
 $sourceRepository = if ($env:GITHUB_REPOSITORY) { $env:GITHUB_REPOSITORY } else { 'LagoVista/Logging' }
 $sourceCommit = if ($env:GITHUB_SHA) { $env:GITHUB_SHA } else { (git rev-parse HEAD).Trim() }
 $sourceRef = if ($env:GITHUB_REF_NAME) { $env:GITHUB_REF_NAME } else { (git branch --show-current).Trim() }
-
-$catalogPackages = @()
-foreach ($package in $packageDefinitions) {
-    $catalogPackages += [ordered]@{
-        id = $package.Id
-        version = $Version
-        file = "$($package.Id).$Version.nupkg"
-        targetFrameworks = @('netstandard2.1')
-        internalDependencies = @($internalDependencies[$package.Id])
-    }
-}
 
 $catalog = [ordered]@{
     schemaVersion = 1
@@ -196,6 +180,7 @@ $catalog = [ordered]@{
     packages = $catalogPackages
 }
 
-$catalog | ConvertTo-Json -Depth 8 | Set-Content -Path $catalogFullPath -Encoding UTF8
-Write-Host "Package catalog written to $catalogFullPath"
-Write-Host "Logging package set $Version built successfully."
+$catalog | ConvertTo-Json -Depth 10 | Set-Content -Path $catalogFullPath -Encoding utf8
+
+Write-Host "Created $($catalogPackages.Count) packages in $outputPath"
+Write-Host "Created $catalogFullPath"
