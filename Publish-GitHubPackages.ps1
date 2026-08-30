@@ -33,6 +33,13 @@ if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_USERNAME) -or
     throw 'NUGET_GITHUB_USERNAME and NUGET_GITHUB_TOKEN are required to publish and verify packages.'
 }
 
+if (-not [string]::IsNullOrWhiteSpace($env:NUIVOT_PLATFORM_WORKSPACE)) {
+    $dependencyTool = Join-Path $env:NUIVOT_PLATFORM_WORKSPACE 'build/Apply-WorkstreamDependencies.ps1'
+    if (-not (Test-Path $dependencyTool)) { throw "Platform dependency tool not found: $dependencyTool" }
+    & $dependencyTool -RepositoryWorkspace $repoRoot
+    if ($LASTEXITCODE -ne 0) { throw "Apply-WorkstreamDependencies.ps1 failed with exit code $LASTEXITCODE." }
+}
+
 $catalogPath = Join-Path $repoRoot 'artifacts/package-catalog.json'
 $packagesPath = Join-Path $repoRoot 'artifacts/packages'
 
