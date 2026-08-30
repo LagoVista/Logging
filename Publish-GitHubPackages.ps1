@@ -63,8 +63,14 @@ try {
                 }
 
                 $lastRestoreError = $restoreLines |
-                    Where-Object { $_ -match '(?i)\berror\b|NU\d{4}' } |
+                    Where-Object { $_ -match 'NU\d{4}' } |
                     Select-Object -Last 1
+
+                if ([string]::IsNullOrWhiteSpace($lastRestoreError)) {
+                    $lastRestoreError = $restoreLines |
+                        Where-Object { $_ -match '(?i)\berror\b' } |
+                        Select-Object -Last 1
+                }
 
                 if ([string]::IsNullOrWhiteSpace($lastRestoreError)) {
                     $lastRestoreError = $restoreLines |
