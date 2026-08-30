@@ -54,17 +54,23 @@ foreach ($package in @($catalog.packages)) {
             Write-Host "Verifying $($package.id) $($package.version) from GitHub Packages (attempt $attempt/8)..."
             $restoreOutput = @(dotnet restore --configfile (Join-Path $repoRoot 'NuGet.config') --force --no-cache 2>&1)
             $restoreExitCode = $LASTEXITCODE
-            $restoreOutput | ForEach-Object { Write-Host $_ }
+            $restoreLines = @($restoreOutput | ForEach-Object { [string]$_ })
+            $restoreLines | ForEach-Object { Write-Host $_ }
 
             if ($restoreExitCode -eq 0) {
                 $verified = $true
                 break
             }
 
-            $lastRestoreError = $restoreOutput |
-                ForEach-Object { [string]$_ } |
-                Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            $lastRestoreError = $restoreLines |
+                Where-Object { $_ -match '(?i)\berror\b|NU\d{4}' } |
                 Select-Object -Last 1
+
+            if ([string]::IsNullOrWhiteSpace($lastRestoreError)) {
+                $lastRestoreError = $restoreLines |
+                    Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+                    Select-Object -Last 1
+            }
 
             if ($attempt -lt 8) {
                 Write-Host 'Package is not restorable yet; waiting 5 seconds for feed propagation.'
