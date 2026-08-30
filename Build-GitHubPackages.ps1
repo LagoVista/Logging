@@ -12,6 +12,24 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
+function Write-PackageStatus {
+    param(
+        [Parameter(Mandatory = $true)][string]$PackageId,
+        [Parameter(Mandatory = $true)][string]$PackageVersion,
+        [Parameter(Mandatory = $true)][string]$State,
+        [Parameter(Mandatory = $false)][string]$Message
+    )
+
+    $payload = [ordered]@{
+        type = 'package'
+        state = $State
+        packageId = $PackageId
+        version = $PackageVersion
+        message = $Message
+    }
+    Write-Output ('BUILD_STATUS:' + ($payload | ConvertTo-Json -Compress))
+}
+
 $repoRoot = $PSScriptRoot
 Set-Location $repoRoot
 
@@ -74,7 +92,10 @@ foreach ($nuspec in $nuspecFiles) {
 }
 
 Write-Host "Discovered $($packages.Count) Logging packages:"
-$packages | Sort-Object Id | ForEach-Object { Write-Host "  $($_.Id)" }
+$packages | Sort-Object Id | ForEach-Object {
+    Write-Host "  $($_.Id)"
+    Write-PackageStatus -PackageId $_.Id -PackageVersion $Version -State 'pending' -Message 'Waiting to pack package'
+}
 
 $xmlSettings = New-Object System.Xml.XmlWriterSettings
 $xmlSettings.Indent = $true
@@ -134,6 +155,7 @@ if ($LASTEXITCODE -ne 0) { throw "dotnet build failed with exit code $LASTEXITCO
 
 $catalogPackages = @()
 foreach ($package in ($packages | Sort-Object Id)) {
+    Write-PackageStatus -PackageId $package.Id -PackageVersion $Version -State 'packing' -Message 'Creating NuGet package'
     Write-Host "Packing $($package.Id) $Version with .NET SDK..."
     dotnet pack $package.ProjectPath `
         --configuration Release `
@@ -149,8 +171,10 @@ foreach ($package in ($packages | Sort-Object Id)) {
     $packageFile = "$($package.Id).$Version.nupkg"
     $packagePath = Join-Path $outputPath $packageFile
     if (-not (Test-Path $packagePath)) {
+        Write-PackageStatus -PackageId $package.Id -PackageVersion $Version -State 'failed' -Message "Expected package was not produced: $packagePath"
         throw "Expected package was not produced: $packagePath"
     }
+    Write-PackageStatus -PackageId $package.Id -PackageVersion $Version -State 'packed' -Message "Created $packageFile"
 
     $frameworks = @(
         $package.Xml.SelectNodes('//dependencies/group') |

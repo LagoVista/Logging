@@ -7,6 +7,24 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 if ($null -ne $PSStyle) { $PSStyle.OutputRendering = 'PlainText' }
 
+function Write-PackageStatus {
+    param(
+        [Parameter(Mandatory = $true)][string]$PackageId,
+        [Parameter(Mandatory = $true)][string]$PackageVersion,
+        [Parameter(Mandatory = $true)][string]$State,
+        [Parameter(Mandatory = $false)][string]$Message
+    )
+
+    $payload = [ordered]@{
+        type = 'package'
+        state = $State
+        packageId = $PackageId
+        version = $PackageVersion
+        message = $Message
+    }
+    Write-Output ('BUILD_STATUS:' + ($payload | ConvertTo-Json -Compress))
+}
+
 $repoRoot = $PSScriptRoot
 Set-Location $repoRoot
 
@@ -27,11 +45,19 @@ if ($null -eq $catalog.packages -or @($catalog.packages).Count -eq 0) { throw 'P
 
 foreach ($package in @($catalog.packages)) {
     $packagePath = Join-Path $packagesPath $package.file
-    if (-not (Test-Path $packagePath)) { throw "Package file not found: $packagePath" }
+    if (-not (Test-Path $packagePath)) {
+        Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'failed' -Message "Package file not found: $packagePath"
+        throw "Package file not found: $packagePath"
+    }
 
+    Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'publishing' -Message 'Uploading package to GitHub Packages'
     Write-Host "Publishing $($package.id) $($package.version)..."
     dotnet nuget push $packagePath --source nuviot --api-key $env:NUGET_GITHUB_TOKEN --skip-duplicate
-    if ($LASTEXITCODE -ne 0) { throw "dotnet nuget push failed for '$($package.id)' with exit code $LASTEXITCODE." }
+    if ($LASTEXITCODE -ne 0) {
+        Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'failed' -Message "dotnet nuget push exited with code $LASTEXITCODE"
+        throw "dotnet nuget push failed for '$($package.id)' with exit code $LASTEXITCODE."
+    }
+    Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'published' -Message 'Package upload completed or version already existed'
 }
 
 $basicCredential = [Convert]::ToBase64String(
@@ -67,6 +93,7 @@ foreach ($package in @($catalog.packages)) {
     $lastError = $null
 
     for ($attempt = 1; $attempt -le 8; $attempt++) {
+        Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'verifying' -Message "Downloading package from GitHub Packages (attempt $attempt/8)"
         Write-Host "Verifying $($package.id) $($package.version) from GitHub Packages (attempt $attempt/8)..."
         try {
             if (Test-Path $downloadPath) { Remove-Item -Force $downloadPath }
@@ -88,10 +115,12 @@ foreach ($package in @($catalog.packages)) {
     }
 
     if (-not $verified) {
+        Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'failed' -Message "Package was not downloadable after 8 attempts: $lastError"
         Write-Host "RELEASE_ERROR: $($package.id) $($package.version) was not downloadable from GitHub Packages after 8 attempts: $lastError"
         exit 1
     }
 
+    Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'verified' -Message 'Downloaded and verified from GitHub Packages'
     Write-Host "Verified $($package.id) $($package.version) from GitHub Packages."
 }
 
