@@ -53,6 +53,11 @@ foreach ($nuspec in $nuspecFiles) {
         throw "NuSpec '$($nuspec.FullName)' does not contain a package id."
     }
 
+    $projectFiles = @(Get-ChildItem -Path $nuspec.DirectoryName -Filter '*.csproj' -File)
+    if ($projectFiles.Count -ne 1) {
+        throw "Expected exactly one project beside '$($nuspec.FullName)', found $($projectFiles.Count)."
+    }
+
     $packageId = [string]$metadata.id
     if ($packageIds.ContainsKey($packageId)) {
         throw "Duplicate package id '$packageId'."
@@ -62,6 +67,8 @@ foreach ($nuspec in $nuspecFiles) {
     $packages += [pscustomobject]@{
         Id = $packageId
         NuSpecPath = $nuspec.FullName
+        ProjectPath = $projectFiles[0].FullName
+        BasePath = $nuspec.DirectoryName
         Xml = $xml
     }
 }
@@ -116,10 +123,16 @@ if ($LASTEXITCODE -ne 0) { throw "dotnet build failed with exit code $LASTEXITCO
 
 $catalogPackages = @()
 foreach ($package in ($packages | Sort-Object Id)) {
-    Write-Host "Packing $($package.Id) $Version..."
-    nuget pack $package.NuSpecPath -Version $Version -OutputDirectory $outputPath -NonInteractive
+    Write-Host "Packing $($package.Id) $Version with .NET SDK..."
+    dotnet pack $package.ProjectPath `
+        --configuration Release `
+        --no-build `
+        --no-restore `
+        --output $outputPath `
+        "-p:NuspecFile=$($package.NuSpecPath)" `
+        "-p:NuspecBasePath=$($package.BasePath)"
     if ($LASTEXITCODE -ne 0) {
-        throw "nuget pack failed for '$($package.Id)' with exit code $LASTEXITCODE."
+        throw "dotnet pack failed for '$($package.Id)' with exit code $LASTEXITCODE."
     }
 
     $packageFile = "$($package.Id).$Version.nupkg"
