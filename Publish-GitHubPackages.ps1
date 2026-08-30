@@ -80,7 +80,8 @@ try {
 
             if (-not $verified) {
                 $detail = if ([string]::IsNullOrWhiteSpace($lastRestoreError)) { 'no restore error text was returned' } else { $lastRestoreError.Trim() }
-                throw "Remote restore verification failed for '$($package.id)' $($package.version): $detail"
+                Write-Host "RELEASE_ERROR: $detail"
+                exit 1
             }
         }
         finally {
