@@ -35,6 +35,17 @@ foreach ($package in @($catalog.packages)) {
 
 $verifyRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("lagovista-logging-verify-" + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force -Path $verifyRoot | Out-Null
+$verifyConfig = Join-Path $verifyRoot 'NuGet.config'
+@'
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <clear />
+    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+    <add key="nuviot" value="https://nuget.pkg.github.com/nuviot/index.json" />
+  </packageSources>
+</configuration>
+'@ | Set-Content -Path $verifyConfig -Encoding utf8
 
 try {
     foreach ($package in @($catalog.packages)) {
@@ -52,7 +63,7 @@ try {
             $lastRestoreError = $null
             for ($attempt = 1; $attempt -le 8; $attempt++) {
                 Write-Host "Verifying $($package.id) $($package.version) from GitHub Packages (attempt $attempt/8)..."
-                $restoreOutput = @(dotnet restore --configfile (Join-Path $repoRoot 'NuGet.config') --force --no-cache 2>&1)
+                $restoreOutput = @(dotnet restore --configfile $verifyConfig --force --no-cache 2>&1)
                 $restoreExitCode = $LASTEXITCODE
                 $restoreLines = @($restoreOutput | ForEach-Object { [string]$_ })
                 $restoreLines | ForEach-Object { Write-Host $_ }
