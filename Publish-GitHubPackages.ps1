@@ -5,6 +5,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
+if ($null -ne $PSStyle) { $PSStyle.OutputRendering = 'PlainText' }
 
 $repoRoot = $PSScriptRoot
 Set-Location $repoRoot
@@ -48,13 +49,22 @@ foreach ($package in @($catalog.packages)) {
         if ($LASTEXITCODE -ne 0) { throw "dotnet add package failed while verifying '$($package.id)'." }
 
         $verified = $false
+        $lastRestoreError = $null
         for ($attempt = 1; $attempt -le 8; $attempt++) {
             Write-Host "Verifying $($package.id) $($package.version) from GitHub Packages (attempt $attempt/8)..."
-            dotnet restore --configfile (Join-Path $repoRoot 'NuGet.config') --force --no-cache
-            if ($LASTEXITCODE -eq 0) {
+            $restoreOutput = @(dotnet restore --configfile (Join-Path $repoRoot 'NuGet.config') --force --no-cache 2>&1)
+            $restoreExitCode = $LASTEXITCODE
+            $restoreOutput | ForEach-Object { Write-Host $_ }
+
+            if ($restoreExitCode -eq 0) {
                 $verified = $true
                 break
             }
+
+            $lastRestoreError = $restoreOutput |
+                ForEach-Object { [string]$_ } |
+                Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+                Select-Object -Last 1
 
             if ($attempt -lt 8) {
                 Write-Host 'Package is not restorable yet; waiting 5 seconds for feed propagation.'
@@ -63,7 +73,8 @@ foreach ($package in @($catalog.packages)) {
         }
 
         if (-not $verified) {
-            throw "Remote restore verification failed for '$($package.id)' $($package.version) after 8 attempts."
+            $detail = if ([string]::IsNullOrWhiteSpace($lastRestoreError)) { 'no restore error text was returned' } else { $lastRestoreError.Trim() }
+            throw "Remote restore verification failed for '$($package.id)' $($package.version): $detail"
         }
     }
     finally {
