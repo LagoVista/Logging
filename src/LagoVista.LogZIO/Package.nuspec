@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.LogZIO</id>
@@ -19,7 +19,7 @@
         <dependency id="OpenTelemetry" version="1.12.0" />
         <dependency id="log4net" version="3.2.0" />
         <dependency id="NLog" version="6.0.4" />
-        <dependency id="LagoVista.Core" version="3.0.3237.0944" />
+        <dependency id="LagoVista.Core" version="5.0.5" />
       </group>
     </dependencies>
   </metadata>
