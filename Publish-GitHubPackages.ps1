@@ -54,22 +54,28 @@ if ($null -eq $packageBaseResource -or [string]::IsNullOrWhiteSpace([string]$pac
 $packageBaseUrl = [string]$packageBaseResource.'@id'
 if (-not $packageBaseUrl.EndsWith('/')) { $packageBaseUrl += '/' }
 
+$verifyRoot = Join-Path $repoRoot 'artifacts/verify-downloads'
+if (Test-Path $verifyRoot) { Remove-Item -Recurse -Force $verifyRoot }
+New-Item -ItemType Directory -Force -Path $verifyRoot | Out-Null
+
 foreach ($package in @($catalog.packages)) {
     $packageId = ([string]$package.id).ToLowerInvariant()
     $packageVersion = ([string]$package.version).ToLowerInvariant()
     $packageUri = "$packageBaseUrl$packageId/$packageVersion/$packageId.$packageVersion.nupkg"
+    $downloadPath = Join-Path $verifyRoot $package.file
     $verified = $false
     $lastError = $null
 
     for ($attempt = 1; $attempt -le 8; $attempt++) {
         Write-Host "Verifying $($package.id) $($package.version) from GitHub Packages (attempt $attempt/8)..."
         try {
-            $response = Invoke-WebRequest -Uri $packageUri -Headers $headers -Method Head -MaximumRedirection 5
-            if ([int]$response.StatusCode -eq 200) {
+            if (Test-Path $downloadPath) { Remove-Item -Force $downloadPath }
+            Invoke-WebRequest -Uri $packageUri -Headers $headers -Method Get -MaximumRedirection 5 -OutFile $downloadPath
+            if ((Test-Path $downloadPath) -and (Get-Item $downloadPath).Length -gt 0) {
                 $verified = $true
                 break
             }
-            $lastError = "HTTP $([int]$response.StatusCode)"
+            $lastError = 'Downloaded package was missing or empty.'
         }
         catch {
             $lastError = $_.Exception.Message
