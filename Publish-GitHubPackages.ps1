@@ -37,7 +37,6 @@ if (-not [string]::IsNullOrWhiteSpace($env:NUIVOT_PLATFORM_WORKSPACE)) {
     $dependencyTool = Join-Path $env:NUIVOT_PLATFORM_WORKSPACE 'build/Apply-WorkstreamDependencies.ps1'
     if (-not (Test-Path $dependencyTool)) { throw "Platform dependency tool not found: $dependencyTool" }
     & $dependencyTool -RepositoryWorkspace $repoRoot
-    if ($LASTEXITCODE -ne 0) { throw "Apply-WorkstreamDependencies.ps1 failed with exit code $LASTEXITCODE." }
 }
 
 $catalogPath = Join-Path $repoRoot 'artifacts/package-catalog.json'
