@@ -47,8 +47,24 @@ foreach ($package in @($catalog.packages)) {
         dotnet add package $package.id --version $package.version --source 'https://nuget.pkg.github.com/nuviot/index.json' --no-restore
         if ($LASTEXITCODE -ne 0) { throw "dotnet add package failed while verifying '$($package.id)'." }
 
-        dotnet restore --configfile (Join-Path $repoRoot 'NuGet.config') --force --no-cache
-        if ($LASTEXITCODE -ne 0) { throw "Remote restore verification failed for '$($package.id)' $($package.version)." }
+        $verified = $false
+        for ($attempt = 1; $attempt -le 8; $attempt++) {
+            Write-Host "Verifying $($package.id) $($package.version) from GitHub Packages (attempt $attempt/8)..."
+            dotnet restore --configfile (Join-Path $repoRoot 'NuGet.config') --force --no-cache
+            if ($LASTEXITCODE -eq 0) {
+                $verified = $true
+                break
+            }
+
+            if ($attempt -lt 8) {
+                Write-Host 'Package is not restorable yet; waiting 5 seconds for feed propagation.'
+                Start-Sleep -Seconds 5
+            }
+        }
+
+        if (-not $verified) {
+            throw "Remote restore verification failed for '$($package.id)' $($package.version) after 8 attempts."
+        }
     }
     finally {
         Pop-Location
