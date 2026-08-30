@@ -10,8 +10,9 @@ if ($null -ne $PSStyle) { $PSStyle.OutputRendering = 'PlainText' }
 $repoRoot = $PSScriptRoot
 Set-Location $repoRoot
 
-if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_TOKEN)) {
-    throw 'NUGET_GITHUB_TOKEN is required to publish packages.'
+if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_USERNAME) -or
+    [string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_TOKEN)) {
+    throw 'NUGET_GITHUB_USERNAME and NUGET_GITHUB_TOKEN are required to publish and verify packages.'
 }
 
 $catalogPath = Join-Path $repoRoot 'artifacts/package-catalog.json'
@@ -33,83 +34,59 @@ foreach ($package in @($catalog.packages)) {
     if ($LASTEXITCODE -ne 0) { throw "dotnet nuget push failed for '$($package.id)' with exit code $LASTEXITCODE." }
 }
 
-$verifyRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("lagovista-logging-verify-" + [Guid]::NewGuid().ToString('N'))
-New-Item -ItemType Directory -Force -Path $verifyRoot | Out-Null
-$verifyConfig = Join-Path $verifyRoot 'NuGet.config'
-@'
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <clear />
-    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
-    <add key="nuviot" value="https://nuget.pkg.github.com/nuviot/index.json" />
-  </packageSources>
-</configuration>
-'@ | Set-Content -Path $verifyConfig -Encoding utf8
-
-try {
-    foreach ($package in @($catalog.packages)) {
-        $packageVerifyRoot = Join-Path $verifyRoot $package.id
-        New-Item -ItemType Directory -Force -Path $packageVerifyRoot | Out-Null
-        Push-Location $packageVerifyRoot
-        try {
-            dotnet new classlib --framework net9.0 --no-restore | Out-Null
-            if ($LASTEXITCODE -ne 0) { throw "dotnet new failed while verifying '$($package.id)'." }
-
-            dotnet add package $package.id --version $package.version --source 'https://nuget.pkg.github.com/nuviot/index.json' --no-restore
-            if ($LASTEXITCODE -ne 0) { throw "dotnet add package failed while verifying '$($package.id)'." }
-
-            $verified = $false
-            $lastRestoreError = $null
-            for ($attempt = 1; $attempt -le 8; $attempt++) {
-                Write-Host "Verifying $($package.id) $($package.version) from GitHub Packages (attempt $attempt/8)..."
-                $restoreOutput = @(dotnet restore --configfile $verifyConfig --force --no-cache 2>&1)
-                $restoreExitCode = $LASTEXITCODE
-                $restoreLines = @($restoreOutput | ForEach-Object { [string]$_ })
-                $restoreLines | ForEach-Object { Write-Host $_ }
-
-                if ($restoreExitCode -eq 0) {
-                    $verified = $true
-                    break
-                }
-
-                $lastRestoreError = $restoreLines |
-                    Where-Object { $_ -match 'NU\d{4}' } |
-                    Select-Object -Last 1
-
-                if ([string]::IsNullOrWhiteSpace($lastRestoreError)) {
-                    $lastRestoreError = $restoreLines |
-                        Where-Object { $_ -match '(?i)\berror\b' } |
-                        Select-Object -Last 1
-                }
-
-                if ([string]::IsNullOrWhiteSpace($lastRestoreError)) {
-                    $lastRestoreError = $restoreLines |
-                        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
-                        Select-Object -Last 1
-                }
-
-                if ($attempt -lt 8) {
-                    Write-Host 'Package is not restorable yet; waiting 5 seconds for feed propagation.'
-                    Start-Sleep -Seconds 5
-                }
-            }
-
-            if (-not $verified) {
-                $detail = if ([string]::IsNullOrWhiteSpace($lastRestoreError)) { 'no restore error text was returned' } else { $lastRestoreError.Trim() }
-                Write-Host "RELEASE_ERROR: $detail"
-                exit 1
-            }
-        }
-        finally {
-            Pop-Location
-        }
-
-        Write-Host "Verified $($package.id) $($package.version) from GitHub Packages."
-    }
+$basicCredential = [Convert]::ToBase64String(
+    [Text.Encoding]::UTF8.GetBytes("$($env:NUGET_GITHUB_USERNAME):$($env:NUGET_GITHUB_TOKEN)"))
+$headers = @{
+    Authorization = "Basic $basicCredential"
+    'User-Agent' = 'softwarelogistics-build-server/0.1'
 }
-finally {
-    if (Test-Path $verifyRoot) { Remove-Item -Recurse -Force $verifyRoot }
+
+$serviceIndexUrl = 'https://nuget.pkg.github.com/nuviot/index.json'
+$serviceIndex = Invoke-RestMethod -Uri $serviceIndexUrl -Headers $headers -Method Get
+$packageBaseResource = @($serviceIndex.resources) |
+    Where-Object { [string]$_.'@type' -like 'PackageBaseAddress/*' } |
+    Select-Object -First 1
+
+if ($null -eq $packageBaseResource -or [string]::IsNullOrWhiteSpace([string]$packageBaseResource.'@id')) {
+    throw "GitHub Packages service index does not expose PackageBaseAddress: $serviceIndexUrl"
+}
+
+$packageBaseUrl = [string]$packageBaseResource.'@id'
+if (-not $packageBaseUrl.EndsWith('/')) { $packageBaseUrl += '/' }
+
+foreach ($package in @($catalog.packages)) {
+    $packageId = ([string]$package.id).ToLowerInvariant()
+    $packageVersion = ([string]$package.version).ToLowerInvariant()
+    $packageUri = "$packageBaseUrl$packageId/$packageVersion/$packageId.$packageVersion.nupkg"
+    $verified = $false
+    $lastError = $null
+
+    for ($attempt = 1; $attempt -le 8; $attempt++) {
+        Write-Host "Verifying $($package.id) $($package.version) from GitHub Packages (attempt $attempt/8)..."
+        try {
+            $response = Invoke-WebRequest -Uri $packageUri -Headers $headers -Method Head -MaximumRedirection 5
+            if ([int]$response.StatusCode -eq 200) {
+                $verified = $true
+                break
+            }
+            $lastError = "HTTP $([int]$response.StatusCode)"
+        }
+        catch {
+            $lastError = $_.Exception.Message
+        }
+
+        if ($attempt -lt 8) {
+            Write-Host 'Package is not remotely available yet; waiting 5 seconds for feed propagation.'
+            Start-Sleep -Seconds 5
+        }
+    }
+
+    if (-not $verified) {
+        Write-Host "RELEASE_ERROR: $($package.id) $($package.version) was not downloadable from GitHub Packages after 8 attempts: $lastError"
+        exit 1
+    }
+
+    Write-Host "Verified $($package.id) $($package.version) from GitHub Packages."
 }
 
 Write-Host "Published and verified $(@($catalog.packages).Count) packages at version $Version."
