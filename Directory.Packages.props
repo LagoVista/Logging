@@ -3,9 +3,9 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="LagoVista.Core" Version="7.0.2" />
-    <PackageVersion Include="LagoVista.Core.Configuration" Version="7.0.2" />
-    <PackageVersion Include="LagoVista.Core.TestBase" Version="7.0.2" />
+    <PackageVersion Include="LagoVista.Core" Version="7.0.3" />
+    <PackageVersion Include="LagoVista.Core.Configuration" Version="7.0.3" />
+    <PackageVersion Include="LagoVista.Core.TestBase" Version="7.0.3" />
     <PackageVersion Include="log4net" Version="3.3.1" />
     <PackageVersion Include="NLog" Version="6.0.4" />
     <PackageVersion Include="OpenTelemetry" Version="1.12.0" />
