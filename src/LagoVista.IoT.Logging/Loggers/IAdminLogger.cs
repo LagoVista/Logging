@@ -20,6 +20,8 @@ namespace LagoVista.IoT.Logging.Loggers
 
         void AddConfigurationError(string tag, string message, params KeyValuePair<string, string>[] args);
 
+        void ConfigureApplicationErrorRepository(IApplicationErrorRepository repository, string application, string environment, string version = null);
+
         void AddMetric(string measure, double duration);
 
         void AddMetric(string measure, int count);
