@@ -17,7 +17,6 @@ namespace LagoVista.IoT.Logging.Loggers
         Task<IReadOnlyList<ApplicationErrorSummary>> GetRecentErrorsAsync(
             int take = 100,
             string application = null,
-            string environment = null,
             CancellationToken cancellationToken = default);
 
         Task<LogRecord> GetErrorAsync(string id, CancellationToken cancellationToken = default);
