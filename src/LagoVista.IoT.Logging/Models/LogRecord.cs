@@ -30,6 +30,9 @@ namespace LagoVista.IoT.Logging.Models
 
         public NormalizedId32 Id { get; set; }
         public string LogLevel { get; set; }
+        public string Application { get; set; }
+        public string Environment { get; set; }
+        public string ExceptionType { get; set; }
         public string HostId { get; set; }
         public string Version { get; set; }
         public string PemId { get; set; }
