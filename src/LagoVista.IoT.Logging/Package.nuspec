@@ -17,7 +17,7 @@
     <dependencies>
       <group targetFramework="netstandard2.1">
         <dependency id="LagoVista.Core.Configuration" version="7.0.12" />
-        <dependency id="LagoVista.LogZIO" version="7.0.6-ws-c-d13f2a30" />
+        <dependency id="LagoVista.LogZIO" version="7.0.7-ws-c-97abd985" />
       </group>
     </dependencies>
   </metadata>
