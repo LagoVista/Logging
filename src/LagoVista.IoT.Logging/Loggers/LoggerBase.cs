@@ -24,6 +24,10 @@ namespace LagoVista.IoT.Logging.Loggers
         private bool _paused = false;
 
         IBackgroundServiceTaskQueue _taskQueue;
+        private IApplicationErrorRepository _applicationErrorRepository;
+        private string _application;
+        private string _environment;
+        private string _version;
 
         public LoggerBase(ILogWriter writer, IBackgroundServiceTaskQueue backgroundTaskQueue = null)
         {
@@ -45,7 +49,9 @@ namespace LagoVista.IoT.Logging.Loggers
             if (!_paused)
             {
                 SetRecordIdentifiers(log);
+                ApplyApplicationErrorContext(log);
                 await _writer.WriteError(log);
+                await WritePersistentErrorAsync(log);
             }
         }
 
@@ -77,20 +83,65 @@ namespace LagoVista.IoT.Logging.Loggers
             if (!_paused)
             {
                 SetRecordIdentifiers(log);
+                ApplyApplicationErrorContext(log);
+
                 if (_taskQueue == null)
                 {
                     await _writer.WriteError(log);
+                    await WritePersistentErrorAsync(log);
                 }
                 else
                 {
                     if (!_taskQueue.TryQueueBackgroundWorkItem(async (cancelToken) =>
                     {
                         await _writer.WriteError(log);
+                        await WritePersistentErrorAsync(log, cancelToken);
                     }))
                     {
                         Console.WriteLine($"[LoggerBase__InsertError] - Could not queue work item, original message: [{log.Area}] {log.Message}");
                     }
                 }
+            }
+        }
+
+        public void ConfigureApplicationErrorRepository(IApplicationErrorRepository repository, string application, string environment, string version = null)
+        {
+            _applicationErrorRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _application = application;
+            _environment = environment;
+            _version = version;
+        }
+
+        private void ApplyApplicationErrorContext(LogRecord log)
+        {
+            if (log == null)
+                return;
+
+            if (String.IsNullOrWhiteSpace(log.Application))
+                log.Application = _application;
+
+            if (String.IsNullOrWhiteSpace(log.Environment))
+                log.Environment = _environment;
+
+            if (String.IsNullOrWhiteSpace(log.Version))
+                log.Version = _version;
+        }
+
+        private async Task WritePersistentErrorAsync(LogRecord log, CancellationToken cancellationToken = default)
+        {
+            var repository = _applicationErrorRepository;
+            if (repository == null || log == null)
+                return;
+
+            try
+            {
+                await repository.WriteErrorAsync(log, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                // Never allow the diagnostic persistence path to break or recursively log
+                // the application error that we were originally trying to record.
+                Console.WriteLine($"[LoggerBase__PersistentError] {ex.Message}");
             }
         }
 
@@ -125,6 +176,7 @@ namespace LagoVista.IoT.Logging.Loggers
                 Tag = tag,
                 Message = ex.Message,
                 StackTrace = ex.StackTrace,
+                ExceptionType = ex.GetType().FullName,
             };
 
             if(ex.InnerException != null)
