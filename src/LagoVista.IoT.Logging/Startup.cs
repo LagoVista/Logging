@@ -15,6 +15,9 @@ namespace LagoVista.IoT.Logging
 {
     public class Startup
     {
+        /// <summary>F218: proves consumption of this specific new Logging NuGet package.</summary>
+        public static string F218LoggingPackageMarker() => "F218-Logging";
+
         public static ILogWriter CreateLogZWriter(IConfiguration configuration, string version, string app, string environment)
         {
             var section = configuration.GetSection("LogzIO");
