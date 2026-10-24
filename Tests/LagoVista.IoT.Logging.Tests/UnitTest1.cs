@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace LagoVista.IoT.Logging.Tests
 {
+    [Category("Integration")]
     public class Tests
     {
         ILogWriter _writer;
