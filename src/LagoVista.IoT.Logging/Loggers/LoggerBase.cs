@@ -21,6 +21,58 @@ namespace LagoVista.IoT.Logging.Loggers
     {
         protected readonly ILogWriter _writer;
 
+        // Attached after host dependency injection becomes available. The primary writer
+        // remains in place for startup/Logz.io and is not replaced by diagnostics.
+        private ILogWriter _secondaryLogWriter;
+
+        public void ConfigureSecondaryLogWriter(ILogWriter writer)
+        {
+            if (ReferenceEquals(_writer, writer))
+                throw new ArgumentException("The secondary writer cannot be the primary writer.", nameof(writer));
+            Volatile.Write(ref _secondaryLogWriter, writer);
+        }
+
+        private async Task WriteEventWithSecondaryAsync(LogRecord log)
+        {
+            try
+            {
+                await _writer.WriteEvent(log).ConfigureAwait(false);
+            }
+            finally
+            {
+                await WriteSecondarySafelyAsync(log, isError: false).ConfigureAwait(false);
+            }
+        }
+
+        private async Task WriteErrorWithSecondaryAsync(LogRecord log)
+        {
+            try
+            {
+                await _writer.WriteError(log).ConfigureAwait(false);
+            }
+            finally
+            {
+                await WriteSecondarySafelyAsync(log, isError: true).ConfigureAwait(false);
+            }
+        }
+
+        private async Task WriteSecondarySafelyAsync(LogRecord log, bool isError)
+        {
+            var writer = Volatile.Read(ref _secondaryLogWriter);
+            if (writer == null) return;
+
+            try
+            {
+                if (isError) await writer.WriteError(log).ConfigureAwait(false);
+                else await writer.WriteEvent(log).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                // No recursive logging: secondary diagnostics must never break application logging.
+                Console.Error.WriteLine($"[LoggerBase__SecondaryWriter] {ex.GetType().Name}: {ex.Message}");
+            }
+        }
+
         private bool _paused = false;
 
         IBackgroundServiceTaskQueue _taskQueue;
@@ -40,7 +92,7 @@ namespace LagoVista.IoT.Logging.Loggers
             if (!_paused)
             {
                 SetRecordIdentifiers(log);
-                await _writer.WriteEvent(log);
+                await WriteEventWithSecondaryAsync(log);
             }
         }
 
@@ -50,7 +102,7 @@ namespace LagoVista.IoT.Logging.Loggers
             {
                 SetRecordIdentifiers(log);
                 ApplyApplicationErrorContext(log);
-                await _writer.WriteError(log);
+                await WriteErrorWithSecondaryAsync(log);
                 await WritePersistentErrorAsync(log);
             }
         }
@@ -62,14 +114,14 @@ namespace LagoVista.IoT.Logging.Loggers
                 SetRecordIdentifiers(log);
                 if (_taskQueue == null)
                 {
-                    await _writer.WriteEvent(log);
+                    await WriteEventWithSecondaryAsync(log);
 
                 }
                 else
                 {
                     if (!_taskQueue.TryQueueBackgroundWorkItem(async (cancelToken) =>
                     {
-                        await _writer.WriteEvent(log);
+                        await WriteEventWithSecondaryAsync(log);
                     }))
                     {
                         Console.WriteLine($"[LoggerBase__InsertError] - Could not queue work item, original message: [{log.Area}] {log.Message}");
@@ -87,14 +139,14 @@ namespace LagoVista.IoT.Logging.Loggers
 
                 if (_taskQueue == null)
                 {
-                    await _writer.WriteError(log);
+                    await WriteErrorWithSecondaryAsync(log);
                     await WritePersistentErrorAsync(log);
                 }
                 else
                 {
                     if (!_taskQueue.TryQueueBackgroundWorkItem(async (cancelToken) =>
                     {
-                        await _writer.WriteError(log);
+                        await WriteErrorWithSecondaryAsync(log);
                         await WritePersistentErrorAsync(log, cancelToken);
                     }))
                     {
