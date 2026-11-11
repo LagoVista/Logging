@@ -4,12 +4,8 @@
 // --- END CODE INDEX META ---
 using LagoVista.IoT.Logging.Loggers;
 using LagoVista.IoT.Logging.Utils;
-using Logzio.DotNet.NLog;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NLog;
-using NLog.Config;
-using System;
 
 namespace LagoVista.IoT.Logging
 {
@@ -18,33 +14,15 @@ namespace LagoVista.IoT.Logging
         /// <summary>F218: proves consumption of this specific new Logging NuGet package.</summary>
         public static string F218LoggingPackageMarker() => "F218-Logging";
 
+        /// <summary>
+        /// Compatibility factory for older hosts. Logz.io has been retired: do not
+        /// require a shipping token, configure NLog, or create a network writer.
+        /// Host diagnostics are written to console during bootstrap and to the
+        /// Cassandra diagnostic sink once the hosted bridge has started.
+        /// </summary>
         public static ILogWriter CreateLogZWriter(IConfiguration configuration, string version, string app, string environment)
         {
-            var section = configuration.GetSection("LogzIO");
-            var token = section.Require("AccessToken");
-
-            var config = new LoggingConfiguration();
-
-            var target = new LogzioTarget()
-            {
-                Name = "Logzio",
-                Token = token,
-                LogzioType = "nlog",
-                ListenerUrl = "https://listener.logz.io:8071",
-                BufferSize = 100,
-                BufferTimeout = TimeSpan.Parse("00:00:05"),
-                RetriesMaxAttempts = 3,
-                RetriesInterval = TimeSpan.Parse("00:00:02"),
-                Debug = true,
-                JsonKeysCamelCase = false,
-                AddTraceContext = false,
-            };            
-
-            config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, target);
-            
-            LogManager.Configuration = config;
-
-            return new Utils.LogZWriter(version, app, environment);
+            return new ConsoleLogWriter();
         }
 
         public static ILogReader CreateLogZReader(IConfigurationRoot configurationRoot)
@@ -62,8 +40,8 @@ namespace LagoVista.DependencyInjection
     {
         public static void AddLagoVistaLoggingModule(this IServiceCollection services, IConfigurationRoot configRoot, IAdminLogger logger)
         {
+            // The host owns its bootstrap writer; do not reset global NLog targets here.
             services.AddScoped<IAzureLogReader, AzureLogReader>();
-            LagoVista.IoT.Logging.Startup.CreateLogZWriter(configRoot, "1.0.0", "LagoVista.IoT.Logging", "Production");
         }
     }
 }
